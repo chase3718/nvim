@@ -20,16 +20,18 @@ vim.opt.rtp:prepend(lazypath)
 -- This is also a good place to setup other settings (vim.opt)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
-
--- Setup lazy.nvim
 require("lazy").setup({
   spec = {
-    -- import your plugins
+    -- 1) LazyVim core first
+    { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+
+    -- 2) LazyVim extras (none right now; add here if you use them)
+    -- { import = "lazyvim.plugins.extras.lang.typescript" },
+
+    -- 3) Your plugins last
     { import = "plugins" },
   },
-  -- Configure any other settings here. See the documentation for more details.
-  -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "habamax" } },
-  -- automatically check for plugin updates
   checker = { enabled = true },
 })
+

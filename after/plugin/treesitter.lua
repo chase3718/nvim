@@ -1,5 +1,26 @@
-require'nvim-treesitter'.setup {
-  -- Directory to install parsers and queries to (prepended to `runtimepath` to have priority)
-  install_dir = vim.fn.stdpath('data') .. '/site'
-}
-require'nvim-treesitter'.install { 'javascript', "lua" }
+require("nvim-treesitter").setup({
+    -- Enable syntax highlighting
+    highlight = {
+        enable = true,
+    },
+    -- Enable indentation
+    indent = {
+        enable = true,
+    },
+    -- Automatically install parsers for new languages
+    auto_install = true,
+    -- List of languages to ensure are installed
+    ensure_installed = {
+        "javascript",
+        "typescript",
+        "lua",
+        "vim",
+        "json",
+        "html",
+        "python",
+        -- Add other languages you use
+    },
+    -- Further module configurations can go here (e.g., textobjects)
+    -- textobjects = { ... },
+})
+
