@@ -175,6 +175,11 @@ These keybindings provide a VSCode-like experience while maintaining Neovim's po
   - Does NOT create tabs in the main view
   - Create multiple terminals with `:ToggleTerm` or by specifying a terminal ID
 - `<C-w>` - Close current buffer/file
+  - If file has unsaved changes, prompts with three options:
+    - **Save and close** - Saves the file and closes the buffer
+    - **Save without closing** - Saves the file but keeps buffer open
+    - **Cancel** - Does nothing, keeps editing
+  - If file is already saved, closes immediately without prompt
 - `<C-s>` - Save file
 
 **Additional VSCode-like behaviors:**
