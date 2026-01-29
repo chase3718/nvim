@@ -21,12 +21,59 @@ A modern, well-structured Neovim configuration using [lazy.nvim](https://github.
 
 ## Requirements
 
-- Neovim >= 0.9.0
-- Git
-- A C compiler (for telescope-fzf-native)
-- Make (for telescope-fzf-native)
-- Node.js (optional, for some LSP servers)
-- Ripgrep (optional, for live grep in Telescope)
+### Essential
+- **Neovim >= 0.9.0** - The editor itself
+- **Git** - For cloning this config and plugin management
+- **C compiler** (gcc/clang) - Required for compiling Treesitter parsers and telescope-fzf-native
+- **Make** - Required for building telescope-fzf-native and LuaSnip jsregexp
+
+### Required for Mason (LSP server installer)
+- **curl** - For downloading LSP servers
+- **unzip** - For extracting downloaded packages
+- **tar** and **gzip** - For extracting tar.gz archives (usually pre-installed on most systems)
+
+### Optional but Recommended
+- **Node.js** and **npm** - Required by many LSP servers (tsserver, eslint, etc.)
+- **Python 3** and **pip** - Required by some LSP servers (pyright, etc.) and for installing Python-based tools
+- **python-pynvim** - Enables Python provider for Neovim (optional but recommended)
+- **Ripgrep** - Significantly improves Telescope's live grep performance
+- **fd** - Enhanced file finder for Telescope (faster alternative to find)
+- **tree-sitter-cli** - CLI tool for nvim-treesitter (optional, only needed for parser development)
+
+## Installing Dependencies
+
+### Arch Linux
+```bash
+sudo pacman -S --needed neovim git base-devel curl unzip ripgrep nodejs npm python python-pip python-pynvim fd
+```
+
+### Ubuntu/Debian
+```bash
+sudo apt update && sudo apt install -y neovim git build-essential curl unzip ripgrep nodejs npm python3 python3-pip python3-pynvim fd-find
+```
+
+### Fedora
+```bash
+sudo dnf install -y neovim git gcc make curl unzip ripgrep nodejs npm python3 python3-pip python3-neovim fd-find
+```
+
+### openSUSE
+```bash
+sudo zypper install -y neovim git gcc make curl unzip ripgrep nodejs npm python3 python3-pip python3-neovim fd
+```
+
+### Alpine Linux
+```bash
+sudo apk add neovim git build-base curl unzip ripgrep nodejs npm python3 py3-pip py3-pynvim fd
+```
+
+**Notes:**
+- `tar` and `gzip` are required by Mason but are typically pre-installed on most Linux distributions. If you encounter extraction errors when Mason installs LSP servers, ensure these utilities are available.
+- After installing pip, you may need to ensure the Python neovim module is installed: `pip install --user pynvim` (if not installed via system package)
+- On Ubuntu/Debian, `fd` is installed as `fd-find`. You can create a symlink: `mkdir -p ~/.local/bin && ln -s $(which fdfind) ~/.local/bin/fd`
+- **tree-sitter-cli** is optional and only needed for parser development. If needed, install via npm: `npm install -g tree-sitter-cli`
+
+**Note:** If your distribution's package manager provides an older version of Neovim (< 0.9.0), you may need to use the [Neovim AppImage](https://github.com/neovim/neovim/releases) or build from source.
 
 ## Installation
 
@@ -230,6 +277,31 @@ Try `:Lazy sync` to reinstall all plugins.
 
 ### Treesitter parser errors
 Update parsers: `:TSUpdate`
+
+### Luarocks warnings in checkhealth
+Luarocks support is already disabled in this configuration (no plugins require it). If you still see warnings, verify that `lua/config/lazy.lua` contains:
+```lua
+require("lazy").setup({
+  spec = { ... },
+  rocks = {
+    enabled = false,
+  },
+})
+```
+
+### Python provider warnings
+If `:checkhealth` shows Python provider warnings:
+1. Install the Python neovim module: `pip install --user pynvim`
+2. Or disable the provider by adding to your `init.lua`: `vim.g.loaded_python3_provider = 0`
+
+### Pip not found error
+If you see "No module named pip":
+1. On Arch: `sudo pacman -S --needed python-pip`
+2. On Ubuntu/Debian: `sudo apt install python3-pip`
+3. Alternative: `python3 -m ensurepip --user`
+
+### Optional language provider warnings
+Mason may show warnings for optional language tools (Ruby, PHP, Java, etc.). These are only needed if you're developing in those languages. Install them only if needed.
 
 ## License
 
