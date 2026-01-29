@@ -70,7 +70,7 @@ sudo apk add neovim git build-base curl unzip ripgrep nodejs npm python3 py3-pip
 **Notes:**
 - `tar` and `gzip` are required by Mason but are typically pre-installed on most Linux distributions. If you encounter extraction errors when Mason installs LSP servers, ensure these utilities are available.
 - After installing pip, you may need to ensure the Python neovim module is installed: `pip install --user pynvim` (if not installed via system package)
-- On Ubuntu/Debian, `fd` is installed as `fd-find`. You can create a symlink: `ln -s $(which fdfind) ~/.local/bin/fd`
+- On Ubuntu/Debian, `fd` is installed as `fd-find`. You can create a symlink: `mkdir -p ~/.local/bin && ln -s $(which fdfind) ~/.local/bin/fd`
 
 **Note:** If your distribution's package manager provides an older version of Neovim (< 0.9.0), you may need to use the [Neovim AppImage](https://github.com/neovim/neovim/releases) or build from source.
 
@@ -278,10 +278,10 @@ Try `:Lazy sync` to reinstall all plugins.
 Update parsers: `:TSUpdate`
 
 ### Luarocks warnings in checkhealth
-If you see warnings about luarocks/hererocks but don't need Lua rocks:
-1. Add this to `lua/config/lazy.lua` in the lazy.nvim setup:
+Luarocks support is already disabled in this configuration (no plugins require it). If you still see warnings, verify that `lua/config/lazy.lua` contains:
 ```lua
-require("lazy").setup("plugins", {
+require("lazy").setup({
+  spec = { ... },
   rocks = {
     enabled = false,
   },
