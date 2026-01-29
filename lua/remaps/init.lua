@@ -65,22 +65,9 @@ vim.keymap.set("n", "<C-b>", function()
 	require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
 end, { desc = "Toggle file browser" })
 
--- Ctrl-`: Open new terminal in its own tab (like VSCode terminal tabs)
--- Each terminal gets its own tab page, separate from file editor tabs
-local terminal_count = 0
-
-vim.keymap.set({"n", "i", "t"}, "<C-`>", function()
-	terminal_count = terminal_count + 1
-	
-	-- Create a new tab page for the terminal
-	vim.cmd("tabnew")
-	-- Open terminal in the new tab
-	vim.cmd("terminal")
-	-- Name the buffer to identify it as a terminal
-	vim.cmd("file Terminal_" .. terminal_count)
-	-- Start in insert mode
-	vim.cmd("startinsert")
-end, { desc = "Open terminal in new tab" })
+-- Ctrl-`: Toggle terminal (handled by toggleterm.nvim plugin)
+-- Terminal opens as a panel at the bottom, doesn't create tabs
+-- Multiple terminals can be created with different numbers (e.g., <leader>2 for terminal 2)
 
 -- Ctrl-w: Close current buffer/file (override Neovim's default window command prefix)
 -- This overrides Ctrl-w which is normally used as a prefix for window commands.
