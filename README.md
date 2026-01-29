@@ -28,9 +28,9 @@ A modern, well-structured Neovim configuration using [lazy.nvim](https://github.
 - **Make** - Required for building telescope-fzf-native and LuaSnip jsregexp
 
 ### Required for Mason (LSP server installer)
-- **curl** or **wget** - For downloading LSP servers
+- **curl** - For downloading LSP servers
 - **unzip** - For extracting downloaded packages
-- **tar** and **gzip** - For extracting tar.gz archives
+- **tar** and **gzip** - For extracting tar.gz archives (usually pre-installed on most systems)
 
 ### Optional but Recommended
 - **Node.js** and **npm** - Required by many LSP servers (tsserver, eslint, etc.)
@@ -41,28 +41,30 @@ A modern, well-structured Neovim configuration using [lazy.nvim](https://github.
 
 ### Arch Linux
 ```bash
-sudo pacman -S neovim git base-devel curl unzip tar gzip ripgrep nodejs npm python python-pip
+sudo pacman -S neovim git base-devel curl unzip ripgrep nodejs npm python python-pip
 ```
 
 ### Ubuntu/Debian
 ```bash
-sudo apt update && sudo apt install -y neovim git build-essential curl unzip tar gzip ripgrep nodejs npm python3 python3-pip
+sudo apt update && sudo apt install -y neovim git build-essential curl unzip ripgrep nodejs npm python3 python3-pip
 ```
 
 ### Fedora
 ```bash
-sudo dnf install -y neovim git gcc make curl unzip tar gzip ripgrep nodejs npm python3 python3-pip
+sudo dnf install -y neovim git gcc make curl unzip ripgrep nodejs npm python3 python3-pip
 ```
 
 ### openSUSE
 ```bash
-sudo zypper install -y neovim git gcc make curl unzip tar gzip ripgrep nodejs npm python3 python3-pip
+sudo zypper install -y neovim git gcc make curl unzip ripgrep nodejs npm python3 python3-pip
 ```
 
 ### Alpine Linux
 ```bash
-sudo apk add neovim git build-base curl unzip tar gzip ripgrep nodejs npm python3 py3-pip
+sudo apk add neovim git build-base curl unzip ripgrep nodejs npm python3 py3-pip
 ```
+
+**Note:** `tar` and `gzip` are required by Mason but are typically pre-installed on most Linux distributions. If you encounter extraction errors when Mason installs LSP servers, ensure these utilities are available.
 
 **Note:** If your distribution's package manager provides an older version of Neovim (< 0.9.0), you may need to use the [Neovim AppImage](https://github.com/neovim/neovim/releases) or build from source.
 
