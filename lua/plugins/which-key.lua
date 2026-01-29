@@ -22,10 +22,12 @@ return {
 			{ "<leader>f", group = "Find" },
 			{ "<leader>g", group = "Git" },
 			{ "<leader>h", group = "Hunk" },
-			{ "<leader>s", group = "Split/Search" },
+			{ "<leader>s", group = "Split" },
 			{ "<leader>t", group = "Toggle" },
 			{ "<leader>v", group = "LSP" },
 			{ "<leader>b", group = "Buffer" },
+			{ "<leader>r", group = "Refactor" },
+			{ "<leader>n", group = "Noice" },
 		})
 	end,
 }

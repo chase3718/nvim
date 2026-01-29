@@ -154,7 +154,6 @@ Lazy.nvim will automatically install all plugins on first launch.
 
 ### General
 - `<Space>` - Leader key
-- `<leader>x` - Open file explorer
 - `<leader>e` - Toggle Neo-tree (cwd)
 - `<leader>E` - Toggle Neo-tree (current file)
 - `<C-s>` - Save file
@@ -202,7 +201,6 @@ Lazy.nvim will automatically install all plugins on first launch.
 
 ### Todo Comments
 - `]t` / `[t` - Next/previous todo comment
-- `<leader>ft` - Find todos with Telescope
 
 ### Comment
 - `gcc` - Toggle line comment
@@ -247,7 +245,7 @@ Lazy.nvim will automatically install all plugins on first launch.
 - `<leader>y` - Copy to system clipboard
 - `<leader>d` - Delete to void register
 - `<leader>s` - Quick substitute word under cursor
-- `<leader>l` - Trigger linting manually
+- `<leader>cl` - Trigger linting manually
 
 ### Vim Illuminate (Reference Highlighting)
 - `]]` - Go to next reference
@@ -268,7 +266,6 @@ Lazy.nvim will automatically install all plugins on first launch.
 - `<leader>nh` - Show message history
 - `<leader>na` - Show all messages
 - `<leader>nd` - Dismiss all notifications
-- `<leader>un` - Dismiss all notifications (Snacks)
 
 ### Completion (nvim-cmp)
 - `<C-n>` - Next suggestion

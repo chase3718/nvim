@@ -12,12 +12,8 @@ return {
 		})
 
 		-- Keymaps
-		vim.keymap.set("n", "<leader>un", function()
-			require("snacks").notifier.hide()
-		end, { desc = "Dismiss All Notifications" })
-
 		vim.keymap.set("n", "<leader>gg", function()
-			require("snacks").lazygit()
+			require("snacks").lazygit.open()
 		end, { desc = "Lazygit" })
 
 		vim.keymap.set("n", "<leader>gb", function()
@@ -25,7 +21,7 @@ return {
 		end, { desc = "Git Blame Line" })
 
 		vim.keymap.set("n", "<leader>gB", function()
-			require("snacks").gitbrowse()
+			require("snacks").git.browse()
 		end, { desc = "Git Browse" })
 	end,
 }

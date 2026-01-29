@@ -13,14 +13,14 @@ return {
 			function()
 				require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
 			end,
-			desc = "Explorer NeoTree (cwd)",
+			desc = "Explorer Neo-tree (cwd)",
 		},
 		{
 			"<leader>E",
 			function()
 				require("neo-tree.command").execute({ toggle = true, dir = vim.fn.expand("%:p:h") })
 			end,
-			desc = "Explorer NeoTree (current file)",
+			desc = "Explorer Neo-tree (current file)",
 		},
 	},
 	deactivate = function()

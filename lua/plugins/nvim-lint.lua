@@ -25,7 +25,7 @@ return {
 		})
 
 		-- Keymap to manually trigger linting
-		vim.keymap.set("n", "<leader>l", function()
+		vim.keymap.set("n", "<leader>cl", function()
 			lint.try_lint()
 		end, { desc = "Trigger linting" })
 	end,
