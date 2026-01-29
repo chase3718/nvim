@@ -179,7 +179,8 @@ These keybindings provide a VSCode-like experience while maintaining Neovim's po
 
 **Additional VSCode-like behaviors:**
 - Opening a file from Neo-tree automatically enters insert mode
-- Git status window (`<leader>gs`) opens in a horizontal split at the bottom
+- New buffers open in tabs by default (help files, Git status, quickfix, etc.)
+- Git status window (`<leader>gs`) opens in a new tab
 
 **Note:** Since `<C-w>` is overridden, window navigation has been remapped:
 - `<C-h>` / `<C-l>` - Move to left/right window (unchanged)
@@ -187,6 +188,14 @@ These keybindings provide a VSCode-like experience while maintaining Neovim's po
 - `<leader>wq` - Close current window
 - `<leader>wo` - Close all other windows
 - Split commands remain at `<leader>sv` (vertical) and `<leader>sh` (horizontal)
+
+### Tab Behavior
+Neovim is configured to open most new buffers in tabs for better organization:
+- **Help files** (`:help command`) automatically open in new tabs
+- **Git status** (`<leader>gs`) opens in a new tab
+- **Quickfix windows** open in new tabs
+- Switch between tabs: `Tab` / `Shift-Tab` or `gt` / `gT`
+- Close current tab: `<C-w>` (closes the buffer/tab)
 
 ### General
 - `<Space>` - Leader key
@@ -224,7 +233,7 @@ These keybindings provide a VSCode-like experience while maintaining Neovim's po
 - `<leader>hn` - Next harpoon file
 
 ### Git (Fugitive)
-- `<leader>gs` - Git status (opens in horizontal split at bottom)
+- `<leader>gs` - Git status (opens in new tab)
 
 ### Snacks (Git)
 - `<leader>gg` - Lazygit (requires lazygit to be installed)
