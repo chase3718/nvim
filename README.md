@@ -53,7 +53,7 @@ A modern, well-structured Neovim configuration using [lazy.nvim](https://github.
 - **Python 3** and **pip** - Required by some LSP servers (pyright, etc.) and for installing Python-based tools
 - **tree-sitter-cli** - CLI tool for nvim-treesitter (optional, only needed for parser development)
 
-**Note:** Node.js, Perl, and Ruby providers are disabled by default in this configuration. If you need them for specific plugins, you can enable them by removing the provider disable lines from `lua/config/options.lua`.
+**Note:** Node.js, Perl, and Ruby providers are disabled by default in this configuration. These providers are only needed for legacy Vim plugins that use the remote plugin system. Modern plugins (including GitHub Copilot which uses LSP) do not require these providers. If you have a specific plugin that requires a provider, you can enable it by removing the provider disable lines from `lua/config/options.lua`.
 
 ## Installing Dependencies
 
@@ -373,7 +373,9 @@ If you see "No module named pip":
 3. Alternative: `python3 -m ensurepip --user`
 
 ### Optional language provider warnings
-Node.js, Perl, and Ruby providers are disabled by default in this configuration to reduce checkhealth warnings. These providers are only needed for specific plugins that use them. If you need them, edit `lua/config/options.lua` and remove or comment out the relevant disable lines:
+Node.js, Perl, and Ruby providers are disabled by default in this configuration to reduce checkhealth warnings. These providers are only needed for legacy Vim plugins that use the remote plugin system. Modern plugins (including GitHub Copilot which uses LSP) do not require these providers.
+
+If you have a specific plugin that requires a provider, edit `lua/config/options.lua` and remove or comment out the relevant disable lines:
 ```lua
 -- vim.g.loaded_node_provider = 0  -- Remove to enable Node.js provider
 -- vim.g.loaded_perl_provider = 0  -- Remove to enable Perl provider
