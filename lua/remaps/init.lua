@@ -62,8 +62,10 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highl
 
 -- Ctrl-b: Toggle file browser (like VSCode's sidebar)
 vim.keymap.set("n", "<C-b>", function()
-	require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
+    require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
 end, { desc = "Toggle file browser" })
+
+vim.keymap.set("n", "<C-a>", "ggvG", { desc = "Select all"})
 
 -- Ctrl-`: Toggle terminal (handled by toggleterm.nvim plugin)
 -- Terminal opens as a panel at the bottom, doesn't create tabs
@@ -73,28 +75,28 @@ end, { desc = "Toggle file browser" })
 -- This overrides Ctrl-w which is normally used as a prefix for window commands.
 -- Essential window navigation is preserved with Ctrl-h/Ctrl-l and leader+w mappings below.
 vim.keymap.set("n", "<C-w>", function()
-	-- Check if buffer is modified (has unsaved changes)
-	if vim.bo.modified then
-		-- Prompt user with options
-		local choice = vim.fn.confirm(
-			"Save changes to " .. vim.fn.expand("%:t") .. "?",
-			"&Save and close\n&Close without saving\nC&ancel",
-			3 -- Default to Cancel
-		)
-		
-		if choice == 1 then
-			-- Save and close
-			vim.cmd("write")
-			vim.cmd("bdelete")
-		elseif choice == 2 then
-			-- Close without saving (discard changes)
-			vim.cmd("bdelete!")
-		end
-		-- choice == 3 or 0 (ESC pressed) - do nothing (cancel)
-	else
-		-- No unsaved changes, close normally
-		vim.cmd("bdelete")
-	end
+    -- Check if buffer is modified (has unsaved changes)
+    if vim.bo.modified then
+        -- Prompt user with options
+        local choice = vim.fn.confirm(
+            "Save changes to " .. vim.fn.expand("%:t") .. "?",
+            "&Save and close\n&Close without saving\nC&ancel",
+            3 -- Default to Cancel
+        )
+
+        if choice == 1 then
+            -- Save and close
+            vim.cmd("write")
+            vim.cmd("bdelete")
+        elseif choice == 2 then
+            -- Close without saving (discard changes)
+            vim.cmd("bdelete!")
+        end
+        -- choice == 3 or 0 (ESC pressed) - do nothing (cancel)
+    else
+        -- No unsaved changes, close normally
+        vim.cmd("bdelete")
+    end
 end, { desc = "Close buffer (with save prompt)" })
 
 -- Restore essential window navigation that used Ctrl-w as prefix
