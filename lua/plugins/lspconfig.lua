@@ -8,10 +8,11 @@ return {
 		"williamboman/mason-lspconfig.nvim",
 	},
 	config = function()
-		local lsp_zero = require("lsp-zero")
+		-- Get default capabilities for nvim-cmp integration
+		local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-		-- LSP attach callback
-		local lsp_attach = function(client, bufnr)
+		-- LSP attach callback for keybindings
+		local on_attach = function(client, bufnr)
 			local opts = { buffer = bufnr, remap = false }
 
 			vim.keymap.set("n", "gd", function()
@@ -55,12 +56,6 @@ return {
 			end, vim.tbl_extend("force", opts, { desc = "Signature help" }))
 		end
 
-		lsp_zero.extend_lspconfig({
-			sign_text = true,
-			lsp_attach = lsp_attach,
-			capabilities = require("cmp_nvim_lsp").default_capabilities(),
-		})
-
 		-- Configure diagnostics
 		vim.diagnostic.config({
 			virtual_text = true,
@@ -78,31 +73,39 @@ return {
 			},
 		})
 
-		-- Mason-lspconfig integration
-		require("mason-lspconfig").setup_handlers({
-			-- Default handler for all servers
-			function(server_name)
-				require("lspconfig")[server_name].setup({})
-			end,
-			-- Custom handler for lua_ls
-			["lua_ls"] = function()
-				require("lspconfig").lua_ls.setup({
-					settings = {
-						Lua = {
-							diagnostics = {
-								globals = { "vim" },
-							},
-							workspace = {
-								library = vim.api.nvim_get_runtime_file("", true),
-								checkThirdParty = false,
-							},
-							telemetry = {
-								enable = false,
-							},
+		-- Setup mason-lspconfig to automatically configure servers installed by Mason
+		local mason_lspconfig = require("mason-lspconfig")
+		local lspconfig = require("lspconfig")
+
+		-- Get list of installed servers
+		local servers = mason_lspconfig.get_installed_servers()
+
+		-- Configure each installed server
+		for _, server_name in ipairs(servers) do
+			local opts = {
+				capabilities = capabilities,
+				on_attach = on_attach,
+			}
+
+			-- Custom configuration for lua_ls
+			if server_name == "lua_ls" then
+				opts.settings = {
+					Lua = {
+						diagnostics = {
+							globals = { "vim" },
+						},
+						workspace = {
+							library = vim.api.nvim_get_runtime_file("", true),
+							checkThirdParty = false,
+						},
+						telemetry = {
+							enable = false,
 						},
 					},
-				})
-			end,
-		})
+				}
+			end
+
+			lspconfig[server_name].setup(opts)
+		end
 	end,
 }
