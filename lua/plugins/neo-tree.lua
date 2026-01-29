@@ -40,35 +40,6 @@ return {
 			popup_border_style = "rounded",
 			enable_git_status = true,
 			enable_diagnostics = true,
-			event_handlers = {
-				{
-					event = "file_opened",
-					handler = function(file_path)
-						-- Enter insert mode only when opening a file from Neo-tree
-						-- Check if the previous window was Neo-tree before entering insert mode
-						vim.schedule(function()
-							-- Get list of all windows
-							local wins = vim.api.nvim_list_wins()
-							local came_from_neotree = false
-							
-							-- Check if any window has neo-tree filetype
-							for _, win in ipairs(wins) do
-								local buf = vim.api.nvim_win_get_buf(win)
-								local ft = vim.api.nvim_buf_get_option(buf, "filetype")
-								if ft == "neo-tree" then
-									came_from_neotree = true
-									break
-								end
-							end
-							
-							-- Only enter insert mode if we came from neo-tree
-							if came_from_neotree then
-								vim.cmd("startinsert")
-							end
-						end)
-					end,
-				},
-			},
 			default_component_configs = {
 				indent = {
 					indent_size = 2,
