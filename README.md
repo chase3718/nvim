@@ -166,11 +166,12 @@ Lazy.nvim will automatically install all plugins on first launch.
 ### VSCode-like Keybindings
 These keybindings provide a VSCode-like experience while maintaining Neovim's powerful motions:
 - `<C-b>` - Toggle file browser (Neo-tree) - works both outside and inside the file explorer
-- `Ctrl-\`` - Open new terminal in a horizontal split below the current view
-  - First press creates a terminal window at the bottom
-  - Subsequent presses create new terminal buffers in the same window (like tabs)
-  - Use `Tab` / `Shift-Tab` to switch between terminal buffers
-  - Terminal window stays independent from main editor tabs
+- `Ctrl-\`` - Open new terminal in its own tab page
+  - Each press creates a new terminal tab (separate from file editor tabs)
+  - Terminal tabs appear in the Neovim tabline
+  - Switch between all tabs (files and terminals) using `Tab` / `Shift-Tab` or `gt` / `gT`
+  - Close terminal tab with `Ctrl-w` (close buffer/tab)
+  - Terminals have their own independent tab system
 - `<C-w>` - Close current buffer/file
 - `<C-s>` - Save file
 
