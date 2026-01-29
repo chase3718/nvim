@@ -37,6 +37,19 @@ vim.keymap.set({ "n", "i" }, "<C-s>", function()
     local use_prettier = prettier_available and prettier_filetypes[filetype]
 
     if use_prettier and filepath ~= "" then
+        -- Check file size before formatting (skip files > 1MB to prevent memory issues)
+        local filesize = vim.fn.getfsize(filepath)
+        local max_size = 1024 * 1024 -- 1MB in bytes
+        
+        if filesize > max_size then
+            vim.notify(
+                string.format("File too large for Prettier (%.1f MB). Skipping formatting.", filesize / (1024 * 1024)),
+                vim.log.levels.WARN
+            )
+            vim.cmd("write")
+            return
+        end
+        
         -- Save the buffer first so Prettier formats the latest changes
         local ok, err = pcall(vim.cmd, "write")
         if not ok then
@@ -46,12 +59,16 @@ vim.keymap.set({ "n", "i" }, "<C-s>", function()
 
         -- Use Prettier for formatting
         local stderr_output = {}
+        local stderr_line_count = 0
+        local max_stderr_lines = 10 -- Limit error output to prevent overwhelming popups
+        
         vim.fn.jobstart({ "prettier", "--write", filepath }, {
             on_stderr = function(_, data)
-                if data then
+                if data and stderr_line_count < max_stderr_lines then
                     for _, line in ipairs(data) do
-                        if line and line ~= "" then
+                        if line and line ~= "" and stderr_line_count < max_stderr_lines then
                             table.insert(stderr_output, line)
+                            stderr_line_count = stderr_line_count + 1
                         end
                     end
                 end
@@ -71,8 +88,31 @@ vim.keymap.set({ "n", "i" }, "<C-s>", function()
                         end)
                         vim.notify("Formatted with Prettier and saved", vim.log.levels.INFO)
                     else
-                        local error_msg = #stderr_output > 0 and table.concat(stderr_output, "\n") or "Unknown error"
-                        vim.notify("File saved but Prettier formatting failed:\n" .. error_msg, vim.log.levels.WARN)
+                        -- Check for common error patterns and provide helpful messages
+                        local error_msg = table.concat(stderr_output, "\n")
+                        
+                        if error_msg:match("heap out of memory") or error_msg:match("FATAL ERROR") then
+                            vim.notify(
+                                "Prettier ran out of memory formatting this file.\n" ..
+                                "File saved but not formatted.\n" ..
+                                "Try formatting a smaller section or use LSP formatting instead.",
+                                vim.log.levels.ERROR
+                            )
+                        elseif error_msg:match("SyntaxError") then
+                            -- Extract just the syntax error line
+                            local syntax_error = error_msg:match("(SyntaxError[^\n]*)")
+                            vim.notify(
+                                "Prettier formatting failed:\n" .. (syntax_error or "Syntax error in file"),
+                                vim.log.levels.WARN
+                            )
+                        else
+                            -- Show truncated error for other failures
+                            local display_msg = #stderr_output > 0 and table.concat(stderr_output, "\n") or "Unknown error"
+                            if stderr_line_count >= max_stderr_lines then
+                                display_msg = display_msg .. "\n... (error output truncated)"
+                            end
+                            vim.notify("File saved but Prettier formatting failed:\n" .. display_msg, vim.log.levels.WARN)
+                        end
                     end
                 end
             end,
