@@ -49,6 +49,9 @@ vim.opt.completeopt = "menu,menuone,noselect"
 -- Mouse support
 vim.opt.mouse = "a"
 
+-- Buffer behavior - open new buffers in tabs
+vim.opt.switchbuf = "usetab,newtab"
+
 -- Disable unused providers to clean up checkhealth warnings
 -- Note: GitHub Copilot uses LSP (not the Node.js provider), so it will still work
 vim.g.loaded_node_provider = 0

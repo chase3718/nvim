@@ -29,6 +29,7 @@ A modern, well-structured Neovim configuration using [lazy.nvim](https://github.
 - 🔆 **Vim-illuminate** for highlighting word references
 - 🍱 **Snacks** for quality of life improvements
 - 🏠 **Dashboard** for beautiful start screen
+- 💻 **Toggleterm** for integrated terminal management
 
 ## Requirements
 
@@ -151,6 +152,7 @@ Lazy.nvim will automatically install all plugins on first launch.
 │   │   ├── snacks.lua      # QoL improvements
 │   │   ├── telescope.lua   # Fuzzy finder
 │   │   ├── todo-comments.lua # TODO highlighting
+│   │   ├── toggleterm.lua  # Terminal management
 │   │   ├── treesitter.lua  # Syntax highlighting
 │   │   ├── undotree.lua    # Undo history
 │   │   ├── vim-fugitive.lua # Git integration
@@ -163,11 +165,46 @@ Lazy.nvim will automatically install all plugins on first launch.
 
 ## Key Mappings
 
+### VSCode-like Keybindings
+These keybindings provide a VSCode-like experience while maintaining Neovim's powerful motions:
+- `<C-b>` - Toggle file browser (Neo-tree) - works both outside and inside the file explorer
+- `Ctrl-\`` - Toggle terminal panel (toggleterm.nvim)
+  - Opens/closes a terminal panel at the bottom of the screen (15 lines)
+  - Terminal persists when toggled off and on
+  - Automatically enters insert mode when opened
+  - Does NOT create tabs in the main view
+  - Create multiple terminals with `:ToggleTerm` or by specifying a terminal ID
+- `<C-w>` - Close current buffer/file
+  - If file has unsaved changes, prompts with three options:
+    - **Save and close** - Saves the file and closes the buffer
+    - **Close without saving** - Discards changes and closes the buffer
+    - **Cancel** - Does nothing, keeps editing
+  - If file is already saved, closes immediately without prompt
+- `<C-s>` - Save file
+
+**Additional VSCode-like behaviors:**
+- New buffers open in tabs by default (help files, Git status, quickfix, etc.)
+- Git status window (`<leader>gs`) opens in a new tab
+
+**Note:** Since `<C-w>` is overridden, window navigation has been remapped:
+- `<C-h>` / `<C-l>` - Move to left/right window (unchanged)
+- `<leader>wj` / `<leader>wk` - Move to down/up window (replaces `<C-w>j` / `<C-w>k`)
+- `<leader>wq` - Close current window
+- `<leader>wo` - Close all other windows
+- Split commands remain at `<leader>sv` (vertical) and `<leader>sh` (horizontal)
+
+### Tab Behavior
+Neovim is configured to open most new buffers in tabs for better organization:
+- **Help files** (`:help command`) automatically open in new tabs
+- **Git status** (`<leader>gs`) opens in a new tab
+- **Quickfix windows** open in new tabs
+- Switch between tabs: `Tab` / `Shift-Tab` or `gt` / `gT`
+- Close current tab: `<C-w>` (closes the buffer/tab)
+
 ### General
 - `<Space>` - Leader key
 - `<leader>e` - Toggle Neo-tree (cwd)
 - `<leader>E` - Toggle Neo-tree (current file)
-- `<C-s>` - Save file
 - `jj` - Exit insert mode (in insert mode)
 - `<C-q>` - Quit
 
@@ -200,7 +237,7 @@ Lazy.nvim will automatically install all plugins on first launch.
 - `<leader>hn` - Next harpoon file
 
 ### Git (Fugitive)
-- `<leader>gs` - Git status
+- `<leader>gs` - Git status (opens in new tab)
 
 ### Snacks (Git)
 - `<leader>gg` - Lazygit (requires lazygit to be installed)

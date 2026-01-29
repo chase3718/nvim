@@ -2,6 +2,9 @@ return {
 	"tpope/vim-fugitive",
 	version = "*",
 	config = function()
-		vim.keymap.set("n", "<leader>gs", vim.cmd.Git, { desc = "Git status" })
+		-- Open Git status in a new tab
+		vim.keymap.set("n", "<leader>gs", function()
+			vim.cmd("tab Git")
+		end, { desc = "Git status" })
 	end,
 }

@@ -54,10 +54,56 @@ vim.keymap.set("n", "<leader>mx", "<cmd>!chmod +x %<CR>", { silent = true, desc 
 -- Clear search highlights
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlights" })
 
-vim.keymap.set("n", "<C-s>", vim.cmd.w)
-vim.keymap.set("i", "jj", "<Esc>")
-vim.keymap.set("n", "<C-q>", vim.cmd.q)
-
 -- from primeagen tutorial - maybe replace these over time
+
+-- ===================================
+-- VSCode-like keybindings
+-- ===================================
+
+-- Ctrl-b: Toggle file browser (like VSCode's sidebar)
+vim.keymap.set("n", "<C-b>", function()
+	require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
+end, { desc = "Toggle file browser" })
+
+-- Ctrl-`: Toggle terminal (handled by toggleterm.nvim plugin)
+-- Terminal opens as a panel at the bottom, doesn't create tabs
+-- Multiple terminals can be created with different numbers (e.g., <leader>2 for terminal 2)
+
+-- Ctrl-w: Close current buffer/file (override Neovim's default window command prefix)
+-- This overrides Ctrl-w which is normally used as a prefix for window commands.
+-- Essential window navigation is preserved with Ctrl-h/Ctrl-l and leader+w mappings below.
+vim.keymap.set("n", "<C-w>", function()
+	-- Check if buffer is modified (has unsaved changes)
+	if vim.bo.modified then
+		-- Prompt user with options
+		local choice = vim.fn.confirm(
+			"Save changes to " .. vim.fn.expand("%:t") .. "?",
+			"&Save and close\n&Close without saving\nC&ancel",
+			3 -- Default to Cancel
+		)
+		
+		if choice == 1 then
+			-- Save and close
+			vim.cmd("write")
+			vim.cmd("bdelete")
+		elseif choice == 2 then
+			-- Close without saving (discard changes)
+			vim.cmd("bdelete!")
+		end
+		-- choice == 3 or 0 (ESC pressed) - do nothing (cancel)
+	else
+		-- No unsaved changes, close normally
+		vim.cmd("bdelete")
+	end
+end, { desc = "Close buffer (with save prompt)" })
+
+-- Restore essential window navigation that used Ctrl-w as prefix
+-- Ctrl-h and Ctrl-l for left/right navigation are already set above (lines 10-11)
+-- For up/down window navigation, use leader+w prefix (Alt-j/k is used for moving lines)
+vim.keymap.set("n", "<leader>wj", "<C-w>j", { desc = "Move to down window" })
+vim.keymap.set("n", "<leader>wk", "<C-w>k", { desc = "Move to up window" })
+vim.keymap.set("n", "<leader>wq", "<C-w>q", { desc = "Close current window" })
+vim.keymap.set("n", "<leader>wo", "<C-w>o", { desc = "Close all other windows" })
+-- Note: Vertical and horizontal splits are already mapped to <leader>sv and <leader>sh at lines 14-15
 
 
