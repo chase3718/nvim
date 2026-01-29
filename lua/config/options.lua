@@ -49,3 +49,9 @@ vim.opt.completeopt = "menu,menuone,noselect"
 -- Mouse support
 vim.opt.mouse = "a"
 
+-- Disable unused providers to clean up checkhealth warnings
+-- Note: GitHub Copilot uses LSP (not the Node.js provider), so it will still work
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
+

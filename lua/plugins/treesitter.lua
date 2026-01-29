@@ -21,11 +21,13 @@ return {
 			"python",
 			"markdown",
 			"markdown_inline",
+			"bash",
+			"regex",
 		})
 
 		-- Enable treesitter highlighting for common filetypes
 		vim.api.nvim_create_autocmd("FileType", {
-			pattern = { "javascript", "typescript", "lua", "vim", "python", "html", "json", "markdown" },
+			pattern = { "javascript", "typescript", "lua", "vim", "python", "html", "json", "markdown", "bash", "sh" },
 			callback = function()
 				vim.treesitter.start()
 			end,
