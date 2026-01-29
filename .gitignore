@@ -1,0 +1,14 @@
+# Lazy.nvim plugin directory
+lazy-lock.json
+
+# Undo history
+undodir/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.swp
+*.swo
+*~
