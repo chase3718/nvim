@@ -170,6 +170,10 @@ These keybindings provide a VSCode-like experience while maintaining Neovim's po
 - `<C-w>` - Close current buffer/file
 - `<C-s>` - Save file
 
+**Additional VSCode-like behaviors:**
+- Opening a file from Neo-tree automatically enters insert mode
+- Git status window (`<leader>gs`) opens in a horizontal split at the bottom
+
 **Note:** Since `<C-w>` is overridden, window navigation has been remapped:
 - `<C-h>` / `<C-l>` - Move to left/right window (unchanged)
 - `<leader>wj` / `<leader>wk` - Move to down/up window (replaces `<C-w>j` / `<C-w>k`)
@@ -213,7 +217,7 @@ These keybindings provide a VSCode-like experience while maintaining Neovim's po
 - `<leader>hn` - Next harpoon file
 
 ### Git (Fugitive)
-- `<leader>gs` - Git status
+- `<leader>gs` - Git status (opens in horizontal split at bottom)
 
 ### Snacks (Git)
 - `<leader>gg` - Lazygit (requires lazygit to be installed)
