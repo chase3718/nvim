@@ -12,12 +12,23 @@ A modern, well-structured Neovim configuration using [lazy.nvim](https://github.
 - 📦 **Mason** for easy LSP server installation
 - 🎯 **Harpoon** for quick file navigation
 - ⏪ **Undotree** for undo history visualization
-- 🔧 **Git integration** with vim-fugitive and gitsigns
+- 🔧 **Git integration** with vim-fugitive, gitsigns, and snacks
 - 🤖 **GitHub Copilot** support
 - 📝 **Comment.nvim** for easy code commenting
 - 🔄 **Autopairs** for automatic bracket completion
 - 📊 **Lualine** status line
 - 🔲 **Indent guides** for better code structure visibility
+- ⌨️ **Which-Key** for keymap hints and discovery
+- 📋 **Todo Comments** highlighting and management
+- 🔍 **Nvim-Lint** for linting support
+- 📑 **Bufferline** for buffer tabs
+- 💬 **Noice** for better UI messages and popups
+- 🎨 **Mini.icons** for consistent icon support
+- 🌲 **Neo-tree** file explorer
+- 🔧 **Refactoring** tools for code refactoring
+- 🔆 **Vim-illuminate** for highlighting word references
+- 🍱 **Snacks** for quality of life improvements
+- 🏠 **Dashboard** for beautiful start screen
 
 ## Requirements
 
@@ -106,9 +117,11 @@ Lazy.nvim will automatically install all plugins on first launch.
 │   ├── init.lua            # General Neovim settings
 │   ├── plugins/            # Plugin specifications
 │   │   ├── autopairs.lua   # Automatic bracket pairing
+│   │   ├── bufferline.lua  # Buffer tabs
 │   │   ├── cmp.lua         # Autocompletion configuration
 │   │   ├── comment.lua     # Easy code commenting
 │   │   ├── copilot.lua     # GitHub Copilot
+│   │   ├── dashboard.lua   # Start screen
 │   │   ├── gitsigns.lua    # Git change indicators
 │   │   ├── harpoon.lua     # Quick file navigation
 │   │   ├── indent-blankline.lua # Indent guides
@@ -116,11 +129,22 @@ Lazy.nvim will automatically install all plugins on first launch.
 │   │   ├── lspconfig.lua   # LSP server configurations
 │   │   ├── lualine.lua     # Status line
 │   │   ├── mason.lua       # LSP/tool installer
+│   │   ├── mini-icons.lua  # Icon provider
+│   │   ├── neo-tree.lua    # File explorer
+│   │   ├── noice.lua       # Better UI for messages and popups
+│   │   ├── nui.lua         # UI component library
+│   │   ├── nvim-lint.lua   # Linting framework
+│   │   ├── nvim-notify.lua # Notification manager
+│   │   ├── refactoring.lua # Refactoring tools
 │   │   ├── rose-pine.lua   # Color scheme
+│   │   ├── snacks.lua      # QoL improvements
 │   │   ├── telescope.lua   # Fuzzy finder
+│   │   ├── todo-comments.lua # TODO highlighting
 │   │   ├── treesitter.lua  # Syntax highlighting
 │   │   ├── undotree.lua    # Undo history
-│   │   └── vim-fugitive.lua # Git integration
+│   │   ├── vim-fugitive.lua # Git integration
+│   │   ├── vim-illuminate.lua # Reference highlighting
+│   │   └── which-key.lua   # Keymap hints
 │   └── remaps/
 │       └── init.lua        # Key mappings
 └── .gitignore
@@ -131,6 +155,8 @@ Lazy.nvim will automatically install all plugins on first launch.
 ### General
 - `<Space>` - Leader key
 - `<leader>x` - Open file explorer
+- `<leader>e` - Toggle Neo-tree (cwd)
+- `<leader>E` - Toggle Neo-tree (current file)
 - `<C-s>` - Save file
 - `jj` - Exit insert mode (in insert mode)
 - `<C-q>` - Quit
@@ -141,6 +167,7 @@ Lazy.nvim will automatically install all plugins on first launch.
 - `<leader>fg` - Live grep
 - `<leader>fb` - Find buffers
 - `<leader>fh` - Find help tags
+- `<leader>ft` - Find todos
 - `<leader>ps` - Grep string (with input)
 
 ### LSP
@@ -165,8 +192,17 @@ Lazy.nvim will automatically install all plugins on first launch.
 ### Git (Fugitive)
 - `<leader>gs` - Git status
 
+### Snacks (Git)
+- `<leader>gg` - Lazygit
+- `<leader>gb` - Git blame line
+- `<leader>gB` - Git browse
+
 ### Undotree
 - `<leader>u` - Toggle undotree
+
+### Todo Comments
+- `]t` / `[t` - Next/previous todo comment
+- `<leader>ft` - Find todos with Telescope
 
 ### Comment
 - `gcc` - Toggle line comment
@@ -192,6 +228,12 @@ Lazy.nvim will automatically install all plugins on first launch.
 - `<Tab>` - Next buffer (normal mode)
 - `<S-Tab>` - Previous buffer (normal mode)
 - `<leader>bd` - Delete buffer
+- `[b` / `]b` - Previous/next buffer (Bufferline)
+- `<leader>bp` - Toggle pin buffer
+- `<leader>bP` - Delete non-pinned buffers
+- `<leader>bo` - Delete other buffers
+- `<leader>br` - Delete buffers to the right
+- `<leader>bl` - Delete buffers to the left
 
 ### Visual Mode
 - `<` / `>` - Indent left/right (stays in visual mode)
@@ -205,6 +247,28 @@ Lazy.nvim will automatically install all plugins on first launch.
 - `<leader>y` - Copy to system clipboard
 - `<leader>d` - Delete to void register
 - `<leader>s` - Quick substitute word under cursor
+- `<leader>l` - Trigger linting manually
+
+### Vim Illuminate (Reference Highlighting)
+- `]]` - Go to next reference
+- `[[` - Go to previous reference
+
+### Refactoring
+- `<leader>re` - Extract function (visual mode)
+- `<leader>rf` - Extract to file (visual mode)
+- `<leader>rv` - Extract variable (visual mode)
+- `<leader>ri` - Inline variable
+- `<leader>rI` - Inline function
+- `<leader>rb` - Extract block
+- `<leader>rbf` - Extract block to file
+- `<leader>rr` - Select refactor (visual mode)
+
+### Noice
+- `<leader>nl` - Show last message
+- `<leader>nh` - Show message history
+- `<leader>na` - Show all messages
+- `<leader>nd` - Dismiss all notifications
+- `<leader>un` - Dismiss all notifications (Snacks)
 
 ### Completion (nvim-cmp)
 - `<C-n>` - Next suggestion
