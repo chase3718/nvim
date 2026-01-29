@@ -28,6 +28,35 @@ A modern, well-structured Neovim configuration using [lazy.nvim](https://github.
 - Node.js (optional, for some LSP servers)
 - Ripgrep (optional, for live grep in Telescope)
 
+## Installing Dependencies
+
+### Arch Linux
+```bash
+sudo pacman -S neovim git base-devel ripgrep nodejs npm
+```
+
+### Ubuntu/Debian
+```bash
+sudo apt update && sudo apt install -y neovim git build-essential ripgrep nodejs npm
+```
+
+### Fedora
+```bash
+sudo dnf install -y neovim git gcc make ripgrep nodejs npm
+```
+
+### openSUSE
+```bash
+sudo zypper install -y neovim git gcc make ripgrep nodejs npm
+```
+
+### Alpine Linux
+```bash
+sudo apk add neovim git build-base ripgrep nodejs npm
+```
+
+**Note:** If your distribution's package manager provides an older version of Neovim (< 0.9.0), you may need to use the [Neovim AppImage](https://github.com/neovim/neovim/releases) or build from source.
+
 ## Installation
 
 1. Backup your existing Neovim configuration:
