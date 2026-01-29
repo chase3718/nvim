@@ -66,17 +66,29 @@ vim.keymap.set("n", "<C-b>", function()
 end, { desc = "Toggle file browser" })
 
 -- Ctrl-`: Open new terminal in a horizontal split below (like VSCode)
--- Uses the built-in terminal to open each terminal in a split at the bottom
+-- Creates a dedicated terminal area at the bottom with tab-like behavior
 local terminal_count = 0
+local terminal_win_id = nil
+
 vim.keymap.set({"n", "i", "t"}, "<C-`>", function()
 	terminal_count = terminal_count + 1
-	-- Move to the bottom and create a horizontal split
-	vim.cmd("botright split")
-	vim.cmd("terminal")
-	-- Name the buffer to identify it as a terminal
-	vim.cmd("file Terminal_" .. terminal_count)
-	-- Resize to reasonable height (e.g., 15 lines)
-	vim.cmd("resize 15")
+	
+	-- Check if terminal window still exists and is valid
+	if terminal_win_id and vim.api.nvim_win_is_valid(terminal_win_id) then
+		-- Terminal window exists, just create new terminal buffer in it
+		vim.api.nvim_set_current_win(terminal_win_id)
+		vim.cmd("terminal")
+		vim.cmd("file Terminal_" .. terminal_count)
+	else
+		-- Create new terminal split at bottom
+		vim.cmd("botright split")
+		vim.cmd("terminal")
+		vim.cmd("file Terminal_" .. terminal_count)
+		vim.cmd("resize 15")
+		-- Store the terminal window ID for reuse
+		terminal_win_id = vim.api.nvim_get_current_win()
+	end
+	
 	-- Start in insert mode
 	vim.cmd("startinsert")
 end, { desc = "Open terminal in split below" })
