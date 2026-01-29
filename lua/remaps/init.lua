@@ -65,19 +65,21 @@ vim.keymap.set("n", "<C-b>", function()
 	require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
 end, { desc = "Toggle file browser" })
 
--- Ctrl-`: Open new terminal in new tab (like VSCode)
--- Uses the built-in terminal to open each terminal in its own tab
+-- Ctrl-`: Open new terminal in a horizontal split below (like VSCode)
+-- Uses the built-in terminal to open each terminal in a split at the bottom
 local terminal_count = 0
 vim.keymap.set({"n", "i", "t"}, "<C-`>", function()
 	terminal_count = terminal_count + 1
-	-- Create a new tab and open terminal in it
-	vim.cmd("tabnew")
+	-- Move to the bottom and create a horizontal split
+	vim.cmd("botright split")
 	vim.cmd("terminal")
 	-- Name the buffer to identify it as a terminal
 	vim.cmd("file Terminal_" .. terminal_count)
+	-- Resize to reasonable height (e.g., 15 lines)
+	vim.cmd("resize 15")
 	-- Start in insert mode
 	vim.cmd("startinsert")
-end, { desc = "Open terminal in new tab" })
+end, { desc = "Open terminal in split below" })
 
 -- Ctrl-w: Close current buffer/file (override Neovim's default window command prefix)
 -- This overrides Ctrl-w which is normally used as a prefix for window commands.
