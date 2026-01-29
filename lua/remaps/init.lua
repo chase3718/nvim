@@ -72,7 +72,30 @@ end, { desc = "Toggle file browser" })
 -- Ctrl-w: Close current buffer/file (override Neovim's default window command prefix)
 -- This overrides Ctrl-w which is normally used as a prefix for window commands.
 -- Essential window navigation is preserved with Ctrl-h/Ctrl-l and leader+w mappings below.
-vim.keymap.set("n", "<C-w>", ":bdelete<CR>", { desc = "Close buffer" })
+vim.keymap.set("n", "<C-w>", function()
+	-- Check if buffer is modified (has unsaved changes)
+	if vim.bo.modified then
+		-- Prompt user with options
+		local choice = vim.fn.confirm(
+			"Save changes to " .. vim.fn.expand("%:t") .. "?",
+			"&Save and close\n&Save without closing\n&Cancel",
+			3 -- Default to Cancel
+		)
+		
+		if choice == 1 then
+			-- Save and close
+			vim.cmd("write")
+			vim.cmd("bdelete")
+		elseif choice == 2 then
+			-- Save without closing
+			vim.cmd("write")
+		end
+		-- choice == 3 or 0 (ESC pressed) - do nothing (cancel)
+	else
+		-- No unsaved changes, close normally
+		vim.cmd("bdelete")
+	end
+end, { desc = "Close buffer (with save prompt)" })
 
 -- Restore essential window navigation that used Ctrl-w as prefix
 -- Ctrl-h and Ctrl-l for left/right navigation are already set above (lines 10-11)
