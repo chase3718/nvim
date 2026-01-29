@@ -40,6 +40,17 @@ return {
 			popup_border_style = "rounded",
 			enable_git_status = true,
 			enable_diagnostics = true,
+			event_handlers = {
+				{
+					event = "file_opened",
+					handler = function()
+						-- Enter insert mode when a file is opened
+						vim.schedule(function()
+							vim.cmd("startinsert")
+						end)
+					end,
+				},
+			},
 			default_component_configs = {
 				indent = {
 					indent_size = 2,
