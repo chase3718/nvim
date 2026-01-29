@@ -3,30 +3,32 @@ return {
 	lazy = false,
 	build = ":TSUpdate",
 	config = function()
-		require("nvim-treesitter.configs").setup({
-			-- Enable syntax highlighting
-			highlight = {
-				enable = true,
-			},
-			-- Enable indentation
-			indent = {
-				enable = true,
-			},
-			-- Automatically install parsers for new languages
-			auto_install = true,
-			-- List of languages to ensure are installed
-			ensure_installed = {
-				"javascript",
-				"typescript",
-				"lua",
-				"vim",
-				"vimdoc", -- Replaces deprecated "help" parser
-				"json",
-				"html",
-				"python",
-				"markdown",
-				"markdown_inline",
-			},
+		-- Configure nvim-treesitter with the new API
+		require("nvim-treesitter").setup({
+			-- Directory to install parsers and queries to
+			install_dir = vim.fn.stdpath("data") .. "/site",
+		})
+
+		-- Install required parsers
+		require("nvim-treesitter").install({
+			"javascript",
+			"typescript",
+			"lua",
+			"vim",
+			"vimdoc",
+			"json",
+			"html",
+			"python",
+			"markdown",
+			"markdown_inline",
+		})
+
+		-- Enable treesitter highlighting for common filetypes
+		vim.api.nvim_create_autocmd("FileType", {
+			pattern = { "javascript", "typescript", "lua", "vim", "python", "html", "json", "markdown" },
+			callback = function()
+				vim.treesitter.start()
+			end,
 		})
 	end,
 }
