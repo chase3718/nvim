@@ -18,7 +18,7 @@ require("nvim-treesitter").setup({
         "json",
         "html",
         "python",
-        -- Add other languages you use
+	"help",
     },
     -- Further module configurations can go here (e.g., textobjects)
     -- textobjects = { ... },
