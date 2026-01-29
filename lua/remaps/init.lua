@@ -10,28 +10,68 @@ vim.keymap.set({ "n", "i" }, "<C-s>", function()
     end
 
     local bufnr = vim.api.nvim_get_current_buf()
+    local filepath = vim.api.nvim_buf_get_name(bufnr)
+    local filetype = vim.bo[bufnr].filetype
 
-    -- Only format if there is an LSP client attached that supports formatting
-    local clients = vim.lsp.get_clients({ bufnr = bufnr })
-    local can_format = false
-    for _, c in ipairs(clients) do
-        if c.supports_method("textDocument/formatting") then
-            can_format = true
-            break
-        end
-    end
+    -- File types that Prettier supports
+    local prettier_filetypes = {
+        javascript = true,
+        javascriptreact = true,
+        typescript = true,
+        typescriptreact = true,
+        vue = true,
+        css = true,
+        scss = true,
+        less = true,
+        html = true,
+        json = true,
+        jsonc = true,
+        yaml = true,
+        markdown = true,
+        graphql = true,
+        handlebars = true,
+    }
 
-    if can_format then
-        -- Neovim: format, then write in the callback
-        vim.lsp.buf.format({
-            bufnr = bufnr,
-            async = true,
-            timeout_ms = 2000,
+    -- Check if Prettier is available
+    local prettier_available = vim.fn.executable("prettier") == 1
+    local use_prettier = prettier_available and prettier_filetypes[filetype]
+
+    if use_prettier and filepath ~= "" then
+        -- Use Prettier for formatting
+        vim.fn.jobstart({ "prettier", "--write", filepath }, {
+            on_exit = function(_, exit_code)
+                if exit_code == 0 then
+                    -- Reload the buffer to show formatted content
+                    vim.cmd("checktime")
+                    vim.notify("Formatted with Prettier and saved", vim.log.levels.INFO)
+                else
+                    vim.notify("Prettier formatting failed", vim.log.levels.WARN)
+                end
+            end,
         })
-        vim.cmd("write")
     else
-        -- No formatter attached: just save
-        vim.cmd("write")
+        -- Fall back to LSP formatting or just save
+        local clients = vim.lsp.get_clients({ bufnr = bufnr })
+        local can_format = false
+        for _, c in ipairs(clients) do
+            if c.supports_method("textDocument/formatting") then
+                can_format = true
+                break
+            end
+        end
+
+        if can_format then
+            -- Neovim: format, then write in the callback
+            vim.lsp.buf.format({
+                bufnr = bufnr,
+                async = true,
+                timeout_ms = 2000,
+            })
+            vim.cmd("write")
+        else
+            -- No formatter attached: just save
+            vim.cmd("write")
+        end
     end
 end, { desc = "Format and save" })
 
