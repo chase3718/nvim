@@ -35,36 +35,42 @@ A modern, well-structured Neovim configuration using [lazy.nvim](https://github.
 ### Optional but Recommended
 - **Node.js** and **npm** - Required by many LSP servers (tsserver, eslint, etc.)
 - **Python 3** and **pip** - Required by some LSP servers (pyright, etc.) and for installing Python-based tools
+- **python-pynvim** - Enables Python provider for Neovim (optional but recommended)
 - **Ripgrep** - Significantly improves Telescope's live grep performance
+- **fd** - Enhanced file finder for Telescope (faster alternative to find)
+- **tree-sitter-cli** - CLI tool for nvim-treesitter (optional, only needed for parser development)
 
 ## Installing Dependencies
 
 ### Arch Linux
 ```bash
-sudo pacman -S neovim git base-devel curl unzip ripgrep nodejs npm python python-pip
+sudo pacman -S --needed neovim git base-devel curl unzip ripgrep nodejs npm python python-pip python-pynvim fd tree-sitter
 ```
 
 ### Ubuntu/Debian
 ```bash
-sudo apt update && sudo apt install -y neovim git build-essential curl unzip ripgrep nodejs npm python3 python3-pip
+sudo apt update && sudo apt install -y neovim git build-essential curl unzip ripgrep nodejs npm python3 python3-pip python3-pynvim fd-find
 ```
 
 ### Fedora
 ```bash
-sudo dnf install -y neovim git gcc make curl unzip ripgrep nodejs npm python3 python3-pip
+sudo dnf install -y neovim git gcc make curl unzip ripgrep nodejs npm python3 python3-pip python3-neovim fd-find tree-sitter-cli
 ```
 
 ### openSUSE
 ```bash
-sudo zypper install -y neovim git gcc make curl unzip ripgrep nodejs npm python3 python3-pip
+sudo zypper install -y neovim git gcc make curl unzip ripgrep nodejs npm python3 python3-pip python3-neovim fd tree-sitter
 ```
 
 ### Alpine Linux
 ```bash
-sudo apk add neovim git build-base curl unzip ripgrep nodejs npm python3 py3-pip
+sudo apk add neovim git build-base curl unzip ripgrep nodejs npm python3 py3-pip py3-pynvim fd tree-sitter
 ```
 
-**Note:** `tar` and `gzip` are required by Mason but are typically pre-installed on most Linux distributions. If you encounter extraction errors when Mason installs LSP servers, ensure these utilities are available.
+**Notes:**
+- `tar` and `gzip` are required by Mason but are typically pre-installed on most Linux distributions. If you encounter extraction errors when Mason installs LSP servers, ensure these utilities are available.
+- After installing pip, you may need to ensure the Python neovim module is installed: `pip install --user pynvim` (if not installed via system package)
+- On Ubuntu/Debian, `fd` is installed as `fd-find`. You can create a symlink: `ln -s $(which fdfind) ~/.local/bin/fd`
 
 **Note:** If your distribution's package manager provides an older version of Neovim (< 0.9.0), you may need to use the [Neovim AppImage](https://github.com/neovim/neovim/releases) or build from source.
 
@@ -270,6 +276,31 @@ Try `:Lazy sync` to reinstall all plugins.
 
 ### Treesitter parser errors
 Update parsers: `:TSUpdate`
+
+### Luarocks warnings in checkhealth
+If you see warnings about luarocks/hererocks but don't need Lua rocks:
+1. Add this to `lua/config/lazy.lua` in the lazy.nvim setup:
+```lua
+require("lazy").setup("plugins", {
+  rocks = {
+    enabled = false,
+  },
+})
+```
+
+### Python provider warnings
+If `:checkhealth` shows Python provider warnings:
+1. Install the Python neovim module: `pip install --user pynvim`
+2. Or disable the provider by adding to your `init.lua`: `vim.g.loaded_python3_provider = 0`
+
+### Pip not found error
+If you see "No module named pip":
+1. On Arch: `sudo pacman -S --needed python-pip`
+2. On Ubuntu/Debian: `sudo apt install python3-pip`
+3. Alternative: `python3 -m ensurepip --user`
+
+### Optional language provider warnings
+Mason may show warnings for optional language tools (Ruby, PHP, Java, etc.). These are only needed if you're developing in those languages. Install them only if needed.
 
 ## License
 
