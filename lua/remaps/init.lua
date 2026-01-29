@@ -54,10 +54,6 @@ vim.keymap.set("n", "<leader>mx", "<cmd>!chmod +x %<CR>", { silent = true, desc 
 -- Clear search highlights
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlights" })
 
-vim.keymap.set("n", "<C-s>", vim.cmd.w)
-vim.keymap.set("i", "jj", "<Esc>")
-vim.keymap.set("n", "<C-q>", vim.cmd.q)
-
 -- from primeagen tutorial - maybe replace these over time
 
 -- ===================================
@@ -70,29 +66,31 @@ vim.keymap.set("n", "<C-b>", function()
 end, { desc = "Toggle file browser" })
 
 -- Ctrl-`: Open new terminal in new tab (like VSCode)
--- Terminal tab counter to keep track of terminal tabs
+-- Uses the built-in terminal to open each terminal in its own tab
 local terminal_count = 0
 vim.keymap.set({"n", "i", "t"}, "<C-`>", function()
 	terminal_count = terminal_count + 1
+	-- Create a new tab and open terminal in it
 	vim.cmd("tabnew")
 	vim.cmd("terminal")
+	-- Name the buffer to identify it as a terminal
+	vim.cmd("file Terminal_" .. terminal_count)
+	-- Start in insert mode
 	vim.cmd("startinsert")
-	-- Rename the tab to show it's a terminal
-	vim.cmd("file Terminal " .. terminal_count)
 end, { desc = "Open terminal in new tab" })
 
 -- Ctrl-w: Close current buffer/file (override Neovim's default window command prefix)
--- First, we need to unmap the default Ctrl-w behavior, then remap it
+-- This overrides Ctrl-w which is normally used as a prefix for window commands.
+-- Essential window navigation is preserved with Ctrl-h/Ctrl-l and leader+w mappings below.
 vim.keymap.set("n", "<C-w>", ":bdelete<CR>", { desc = "Close buffer" })
 
 -- Restore essential window navigation that used Ctrl-w as prefix
--- Keep Ctrl-h and Ctrl-l for left/right navigation (already set above)
--- For up/down window navigation, use leader + direction since Alt-j/k is used for moving lines
+-- Ctrl-h and Ctrl-l for left/right navigation are already set above (lines 10-11)
+-- For up/down window navigation, use leader+w prefix (Alt-j/k is used for moving lines)
 vim.keymap.set("n", "<leader>wj", "<C-w>j", { desc = "Move to down window" })
 vim.keymap.set("n", "<leader>wk", "<C-w>k", { desc = "Move to up window" })
-vim.keymap.set("n", "<leader>wv", "<C-w>v", { desc = "Split window vertically (alias)" })
-vim.keymap.set("n", "<leader>ws", "<C-w>s", { desc = "Split window horizontally (alias)" })
 vim.keymap.set("n", "<leader>wq", "<C-w>q", { desc = "Close current window" })
 vim.keymap.set("n", "<leader>wo", "<C-w>o", { desc = "Close all other windows" })
+-- Note: Vertical and horizontal splits are already mapped to <leader>sv and <leader>sh at lines 14-15
 
 
