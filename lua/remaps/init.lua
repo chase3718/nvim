@@ -2,9 +2,42 @@
 
 -- Basic remaps
 vim.keymap.set("n", "<leader>x", vim.cmd.Ex, { desc = "Open file explorer" })
-vim.keymap.set("n", "<C-s>", vim.cmd.w, { desc = "Save file" })
+-- Format + Save (Ctrl-s)
+vim.keymap.set({ "n", "i" }, "<C-s>", function()
+    -- leave insert mode so formatting doesn't fight your typing
+    if vim.fn.mode() == "i" then
+        vim.cmd.stopinsert()
+    end
+
+    local bufnr = vim.api.nvim_get_current_buf()
+
+    -- Only format if there is an LSP client attached that supports formatting
+    local clients = vim.lsp.get_clients({ bufnr = bufnr })
+    local can_format = false
+    for _, c in ipairs(clients) do
+        if c.supports_method("textDocument/formatting") then
+            can_format = true
+            break
+        end
+    end
+
+    if can_format then
+        -- Neovim: format, then write in the callback
+        vim.lsp.buf.format({
+            bufnr = bufnr,
+            async = true,
+            timeout_ms = 2000,
+        })
+        vim.cmd("write")
+    else
+        -- No formatter attached: just save
+        vim.cmd("write")
+    end
+end, { desc = "Format and save" })
+
 vim.keymap.set("i", "jj", "<Esc>", { desc = "Exit insert mode" })
-vim.keymap.set("n", "<C-q>", vim.cmd.q, { desc = "Quit" })
+vim.keymap.set("i", "<C-c>", "<Esc>", { desc = "Exit insert mode" })
+vim.keymap.set({ "n", "i" }, "<C-q>", ":qa!<CR>", { desc = "Quit" })
 
 -- Window navigation
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
@@ -39,14 +72,15 @@ vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous search result" })
 vim.keymap.set("x", "<leader>p", [["_dP]], { desc = "Paste without losing register" })
 
 -- Copy to system clipboard
-vim.keymap.set({"n", "v"}, "<leader>y", [["+y]], { desc = "Copy to system clipboard" })
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Copy to system clipboard" })
 vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "Copy line to system clipboard" })
 
 -- Delete to void register
-vim.keymap.set({"n", "v"}, "<leader>d", [["_d]], { desc = "Delete to void register" })
+vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete to void register" })
 
 -- Quick substitute
-vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Quick substitute word" })
+vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+    { desc = "Quick substitute word" })
 
 -- Make file executable
 vim.keymap.set("n", "<leader>mx", "<cmd>!chmod +x %<CR>", { silent = true, desc = "Make file executable" })
@@ -65,7 +99,7 @@ vim.keymap.set("n", "<C-b>", function()
     require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
 end, { desc = "Toggle file browser" })
 
-vim.keymap.set("n", "<C-a>", "ggvG", { desc = "Select all"})
+vim.keymap.set("n", "<C-a>", "gg0vG$", { desc = "Select all" })
 
 -- Ctrl-`: Toggle terminal (handled by toggleterm.nvim plugin)
 -- Terminal opens as a panel at the bottom, doesn't create tabs
@@ -107,5 +141,3 @@ vim.keymap.set("n", "<leader>wk", "<C-w>k", { desc = "Move to up window" })
 vim.keymap.set("n", "<leader>wq", "<C-w>q", { desc = "Close current window" })
 vim.keymap.set("n", "<leader>wo", "<C-w>o", { desc = "Close all other windows" })
 -- Note: Vertical and horizontal splits are already mapped to <leader>sv and <leader>sh at lines 14-15
-
-

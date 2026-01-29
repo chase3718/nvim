@@ -11,7 +11,7 @@ return {
 				themable = true,
 				numbers = "none",
 				close_command = "bdelete! %d",
-				right_mouse_command = "bdelete! %d",
+				right_mouse_command = nil,
 				left_mouse_command = "buffer %d",
 				middle_mouse_command = nil,
 				indicator = {
