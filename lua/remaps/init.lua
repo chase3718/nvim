@@ -43,6 +43,7 @@ vim.keymap.set({ "n", "i" }, "<C-s>", function()
                 if exit_code == 0 then
                     -- Reload the buffer to show formatted content
                     vim.cmd("checktime")
+                    vim.cmd("write")
                     vim.notify("Formatted with Prettier and saved", vim.log.levels.INFO)
                 else
                     vim.notify("Prettier formatting failed", vim.log.levels.WARN)
