@@ -61,8 +61,13 @@ vim.keymap.set({ "n", "i" }, "<C-s>", function()
                 if vim.api.nvim_buf_is_valid(bufnr) and vim.api.nvim_buf_get_name(bufnr) == filepath then
                     if exit_code == 0 then
                         -- Reload the buffer to show formatted content (using edit! to avoid W12 warnings)
+                        -- Only reload if buffer hasn't been modified since we saved it
                         vim.api.nvim_buf_call(bufnr, function()
-                            vim.cmd("edit!")
+                            if not vim.bo[bufnr].modified then
+                                vim.cmd("edit!")
+                            else
+                                vim.notify("Buffer was modified during formatting, skipping reload to preserve changes", vim.log.levels.WARN)
+                            end
                         end)
                         vim.notify("Formatted with Prettier and saved", vim.log.levels.INFO)
                     else
