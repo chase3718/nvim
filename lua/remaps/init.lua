@@ -65,33 +65,22 @@ vim.keymap.set("n", "<C-b>", function()
 	require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
 end, { desc = "Toggle file browser" })
 
--- Ctrl-`: Open new terminal in a horizontal split below (like VSCode)
--- Creates a dedicated terminal area at the bottom with tab-like behavior
+-- Ctrl-`: Open new terminal in its own tab (like VSCode terminal tabs)
+-- Each terminal gets its own tab page, separate from file editor tabs
 local terminal_count = 0
-local terminal_win_id = nil
 
 vim.keymap.set({"n", "i", "t"}, "<C-`>", function()
 	terminal_count = terminal_count + 1
 	
-	-- Check if terminal window still exists and is valid
-	if terminal_win_id and vim.api.nvim_win_is_valid(terminal_win_id) then
-		-- Terminal window exists, just create new terminal buffer in it
-		vim.api.nvim_set_current_win(terminal_win_id)
-		vim.cmd("terminal")
-		vim.cmd("file Terminal_" .. terminal_count)
-	else
-		-- Create new terminal split at bottom
-		vim.cmd("botright split")
-		vim.cmd("terminal")
-		vim.cmd("file Terminal_" .. terminal_count)
-		vim.cmd("resize 15")
-		-- Store the terminal window ID for reuse
-		terminal_win_id = vim.api.nvim_get_current_win()
-	end
-	
+	-- Create a new tab page for the terminal
+	vim.cmd("tabnew")
+	-- Open terminal in the new tab
+	vim.cmd("terminal")
+	-- Name the buffer to identify it as a terminal
+	vim.cmd("file Terminal_" .. terminal_count)
 	-- Start in insert mode
 	vim.cmd("startinsert")
-end, { desc = "Open terminal in split below" })
+end, { desc = "Open terminal in new tab" })
 
 -- Ctrl-w: Close current buffer/file (override Neovim's default window command prefix)
 -- This overrides Ctrl-w which is normally used as a prefix for window commands.
