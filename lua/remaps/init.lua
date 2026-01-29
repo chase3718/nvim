@@ -38,9 +38,9 @@ vim.keymap.set({ "n", "i" }, "<C-s>", function()
 
     if use_prettier and filepath ~= "" then
         -- Save the buffer first so Prettier formats the latest changes
-        local ok = pcall(vim.cmd, "write")
+        local ok, err = pcall(vim.cmd, "write")
         if not ok then
-            vim.notify("Failed to save file", vim.log.levels.ERROR)
+            vim.notify("Failed to save file: " .. tostring(err), vim.log.levels.ERROR)
             return
         end
 
@@ -64,7 +64,7 @@ vim.keymap.set({ "n", "i" }, "<C-s>", function()
                         vim.api.nvim_buf_call(bufnr, function()
                             vim.cmd("checktime")
                         end)
-                        vim.notify("Formatted with Prettier", vim.log.levels.INFO)
+                        vim.notify("Formatted with Prettier and saved", vim.log.levels.INFO)
                     else
                         local error_msg = #stderr_output > 0 and table.concat(stderr_output, "\n") or "Unknown error"
                         vim.notify("File saved but Prettier formatting failed:\n" .. error_msg, vim.log.levels.WARN)
@@ -90,7 +90,10 @@ vim.keymap.set({ "n", "i" }, "<C-s>", function()
                 async = false,
                 timeout_ms = 2000,
             })
-            vim.cmd("write")
+            local ok, err = pcall(vim.cmd, "write")
+            if not ok then
+                vim.notify("Failed to save file: " .. tostring(err), vim.log.levels.ERROR)
+            end
         else
             -- No formatter attached: just save
             vim.cmd("write")
