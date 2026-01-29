@@ -177,7 +177,7 @@ These keybindings provide a VSCode-like experience while maintaining Neovim's po
 - `<C-w>` - Close current buffer/file
   - If file has unsaved changes, prompts with three options:
     - **Save and close** - Saves the file and closes the buffer
-    - **Save without closing** - Saves the file but keeps buffer open
+    - **Close without saving** - Discards changes and closes the buffer
     - **Cancel** - Does nothing, keeps editing
   - If file is already saved, closes immediately without prompt
 - `<C-s>` - Save file
