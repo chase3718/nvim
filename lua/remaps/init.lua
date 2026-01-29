@@ -10,28 +10,140 @@ vim.keymap.set({ "n", "i" }, "<C-s>", function()
     end
 
     local bufnr = vim.api.nvim_get_current_buf()
+    local filepath = vim.api.nvim_buf_get_name(bufnr)
+    local filetype = vim.bo[bufnr].filetype
 
-    -- Only format if there is an LSP client attached that supports formatting
-    local clients = vim.lsp.get_clients({ bufnr = bufnr })
-    local can_format = false
-    for _, c in ipairs(clients) do
-        if c.supports_method("textDocument/formatting") then
-            can_format = true
-            break
+    -- File types that Prettier supports
+    local prettier_filetypes = {
+        javascript = true,
+        javascriptreact = true,
+        typescript = true,
+        typescriptreact = true,
+        vue = true,
+        css = true,
+        scss = true,
+        less = true,
+        html = true,
+        json = true,
+        jsonc = true,
+        yaml = true,
+        markdown = true,
+        graphql = true,
+        handlebars = true,
+    }
+
+    -- Check if Prettier is available
+    local prettier_available = vim.fn.executable("prettier") == 1
+    local use_prettier = prettier_available and prettier_filetypes[filetype]
+
+    if use_prettier and filepath ~= "" then
+        -- Save the buffer first so Prettier formats the latest changes
+        local ok, err = pcall(vim.cmd, "write")
+        if not ok then
+            vim.notify("Failed to save file: " .. tostring(err), vim.log.levels.ERROR)
+            return
         end
-    end
+        
+        -- Check file size after saving (skip files > 1MB to prevent memory issues)
+        local filesize = vim.fn.getfsize(filepath)
+        local max_size = 1024 * 1024 -- 1MB in bytes
+        
+        if filesize > max_size then
+            vim.notify(
+                string.format("File too large for Prettier (%.1f MB). File saved but not formatted.", filesize / (1024 * 1024)),
+                vim.log.levels.WARN
+            )
+            return
+        end
 
-    if can_format then
-        -- Neovim: format, then write in the callback
-        vim.lsp.buf.format({
-            bufnr = bufnr,
-            async = true,
-            timeout_ms = 2000,
+        -- Use Prettier for formatting
+        local stderr_output = {}
+        local stderr_line_count = 0
+        local max_stderr_lines = 10 -- Limit error output to prevent overwhelming popups
+        
+        vim.fn.jobstart({ "prettier", "--write", filepath }, {
+            on_stderr = function(_, data)
+                if data and stderr_line_count < max_stderr_lines then
+                    for _, line in ipairs(data) do
+                        if line and line ~= "" and stderr_line_count < max_stderr_lines then
+                            table.insert(stderr_output, line)
+                            stderr_line_count = stderr_line_count + 1
+                        end
+                    end
+                end
+            end,
+            on_exit = function(_, exit_code)
+                -- Check if buffer is still valid and matches the filepath
+                if vim.api.nvim_buf_is_valid(bufnr) and vim.api.nvim_buf_get_name(bufnr) == filepath then
+                    if exit_code == 0 then
+                        -- Reload the buffer to show formatted content (using edit! to avoid W12 warnings)
+                        -- Only reload if buffer hasn't been modified since we saved it
+                        vim.api.nvim_buf_call(bufnr, function()
+                            if not vim.bo[bufnr].modified then
+                                vim.cmd("edit!")
+                            else
+                                vim.notify("Buffer was modified during formatting, skipping reload to preserve changes", vim.log.levels.WARN)
+                            end
+                        end)
+                        vim.notify("Formatted with Prettier and saved", vim.log.levels.INFO)
+                    else
+                        -- Check for common error patterns and provide helpful messages
+                        local error_msg = table.concat(stderr_output, "\n")
+                        
+                        if error_msg:match("[Hh]eap out of memory") or error_msg:match("FATAL ERROR") then
+                            vim.notify(
+                                "Prettier ran out of memory formatting this file.\n" ..
+                                "File saved but not formatted.\n" ..
+                                "Try formatting a smaller section or use LSP formatting instead.",
+                                vim.log.levels.ERROR
+                            )
+                        elseif error_msg:match("SyntaxError") then
+                            -- Extract just the syntax error line
+                            local syntax_error = error_msg:match("(SyntaxError[^\n]*)")
+                            vim.notify(
+                                "Prettier formatting failed:\n" .. (syntax_error or "Syntax error in file"),
+                                vim.log.levels.WARN
+                            )
+                        elseif #stderr_output > 0 then
+                            -- Show truncated error for other failures
+                            local display_msg = error_msg
+                            if stderr_line_count >= max_stderr_lines then
+                                display_msg = display_msg .. "\n... (error output truncated)"
+                            end
+                            vim.notify("File saved but Prettier formatting failed:\n" .. display_msg, vim.log.levels.WARN)
+                        else
+                            vim.notify("File saved but Prettier formatting failed (unknown error)", vim.log.levels.WARN)
+                        end
+                    end
+                end
+            end,
         })
-        vim.cmd("write")
     else
-        -- No formatter attached: just save
-        vim.cmd("write")
+        -- Fall back to LSP formatting or just save
+        local clients = vim.lsp.get_clients({ bufnr = bufnr })
+        local can_format = false
+        for _, c in ipairs(clients) do
+            if c.supports_method("textDocument/formatting") then
+                can_format = true
+                break
+            end
+        end
+
+        if can_format then
+            -- Format synchronously, then write
+            vim.lsp.buf.format({
+                bufnr = bufnr,
+                async = false,
+                timeout_ms = 2000,
+            })
+            local ok, err = pcall(vim.cmd, "write")
+            if not ok then
+                vim.notify("Failed to save file: " .. tostring(err), vim.log.levels.ERROR)
+            end
+        else
+            -- No formatter attached: just save
+            vim.cmd("write")
+        end
     end
 end, { desc = "Format and save" })
 
