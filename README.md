@@ -21,38 +21,47 @@ A modern, well-structured Neovim configuration using [lazy.nvim](https://github.
 
 ## Requirements
 
-- Neovim >= 0.9.0
-- Git
-- A C compiler (for telescope-fzf-native)
-- Make (for telescope-fzf-native)
-- Node.js (optional, for some LSP servers)
-- Ripgrep (optional, for live grep in Telescope)
+### Essential
+- **Neovim >= 0.9.0** - The editor itself
+- **Git** - For cloning this config and plugin management
+- **C compiler** (gcc/clang) - Required for compiling Treesitter parsers and telescope-fzf-native
+- **Make** - Required for building telescope-fzf-native and LuaSnip jsregexp
+
+### Required for Mason (LSP server installer)
+- **curl** or **wget** - For downloading LSP servers
+- **unzip** - For extracting downloaded packages
+- **tar** and **gzip** - For extracting tar.gz archives
+
+### Optional but Recommended
+- **Node.js** and **npm** - Required by many LSP servers (tsserver, eslint, etc.)
+- **Python 3** - Required by some LSP servers (pyright, etc.)
+- **Ripgrep** - Significantly improves Telescope's live grep performance
 
 ## Installing Dependencies
 
 ### Arch Linux
 ```bash
-sudo pacman -S neovim git base-devel ripgrep nodejs npm
+sudo pacman -S neovim git base-devel curl wget unzip tar gzip ripgrep nodejs npm python
 ```
 
 ### Ubuntu/Debian
 ```bash
-sudo apt update && sudo apt install -y neovim git build-essential ripgrep nodejs npm
+sudo apt update && sudo apt install -y neovim git build-essential curl wget unzip tar gzip ripgrep nodejs npm python3 python3-pip
 ```
 
 ### Fedora
 ```bash
-sudo dnf install -y neovim git gcc make ripgrep nodejs npm
+sudo dnf install -y neovim git gcc make curl wget unzip tar gzip ripgrep nodejs npm python3 python3-pip
 ```
 
 ### openSUSE
 ```bash
-sudo zypper install -y neovim git gcc make ripgrep nodejs npm
+sudo zypper install -y neovim git gcc make curl wget unzip tar gzip ripgrep nodejs npm python3 python3-pip
 ```
 
 ### Alpine Linux
 ```bash
-sudo apk add neovim git build-base ripgrep nodejs npm
+sudo apk add neovim git build-base curl wget unzip tar gzip ripgrep nodejs npm python3 py3-pip
 ```
 
 **Note:** If your distribution's package manager provides an older version of Neovim (< 0.9.0), you may need to use the [Neovim AppImage](https://github.com/neovim/neovim/releases) or build from source.
