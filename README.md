@@ -48,6 +48,7 @@ A modern, well-structured Neovim configuration using [lazy.nvim](https://github.
 - **Ripgrep** - Significantly improves Telescope's live grep performance
 - **fd** - Enhanced file finder for Telescope (faster alternative to find)
 - **lazygit** - Terminal UI for git (used by snacks.nvim, optional)
+- **Prettier** - Code formatter for JavaScript, TypeScript, JSON, CSS, HTML, and more (automatically detected by Ctrl-S command)
 
 ### Optional for Development
 - **Node.js** and **npm** - Required by many LSP servers (tsserver, eslint, etc.)
@@ -97,6 +98,22 @@ sudo apk add neovim git build-base curl unzip ripgrep fd
 - **lazygit** is optional but recommended for the `<leader>gg` git UI keybinding. Without it, the keybinding simply won't be registered.
 
 **Note:** If your distribution's package manager provides an older version of Neovim (< 0.9.0), you may need to use the [Neovim AppImage](https://github.com/neovim/neovim/releases) or build from source.
+
+### Installing Prettier (Optional)
+
+Prettier is a code formatter that works with JavaScript, TypeScript, JSON, CSS, HTML, and many other file types. The Ctrl-S command will automatically detect and use Prettier when available.
+
+**Install globally with npm (recommended):**
+```bash
+npm install -g prettier
+```
+
+**Install locally in a project:**
+```bash
+npm install --save-dev prettier
+```
+
+**Note:** If Prettier is installed locally in a project's `node_modules`, it will be used when you're editing files in that project. Global installation makes it available for all projects.
 
 ## Installation
 
@@ -180,7 +197,10 @@ These keybindings provide a VSCode-like experience while maintaining Neovim's po
     - **Close without saving** - Discards changes and closes the buffer
     - **Cancel** - Does nothing, keeps editing
   - If file is already saved, closes immediately without prompt
-- `<C-s>` - Save file
+- `<C-s>` - Format and save file
+  - Automatically detects and uses Prettier if available for supported file types (JavaScript, TypeScript, JSON, CSS, HTML, Markdown, etc.)
+  - Falls back to LSP formatting if Prettier is not available or doesn't support the file type
+  - Simply saves the file if no formatter is available
 
 **Additional VSCode-like behaviors:**
 - New buffers open in tabs by default (help files, Git status, quickfix, etc.)
