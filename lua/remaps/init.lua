@@ -86,14 +86,13 @@ end, { desc = "Open terminal in new tab" })
 vim.keymap.set("n", "<C-w>", ":bdelete<CR>", { desc = "Close buffer" })
 
 -- Restore essential window navigation that used Ctrl-w as prefix
--- These now use Alt as the modifier to avoid conflicts
-vim.keymap.set("n", "<A-h>", "<C-w>h", { desc = "Move to left window" })
-vim.keymap.set("n", "<A-j>", "<C-w>j", { desc = "Move to down window" })
-vim.keymap.set("n", "<A-k>", "<C-w>k", { desc = "Move to up window" })
-vim.keymap.set("n", "<A-l>", "<C-w>l", { desc = "Move to right window" })
-vim.keymap.set("n", "<A-v>", "<C-w>v", { desc = "Split window vertically" })
-vim.keymap.set("n", "<A-s>", "<C-w>s", { desc = "Split window horizontally" })
-vim.keymap.set("n", "<A-q>", "<C-w>q", { desc = "Close current window" })
-vim.keymap.set("n", "<A-o>", "<C-w>o", { desc = "Close all other windows" })
+-- Keep Ctrl-h and Ctrl-l for left/right navigation (already set above)
+-- For up/down window navigation, use leader + direction since Alt-j/k is used for moving lines
+vim.keymap.set("n", "<leader>wj", "<C-w>j", { desc = "Move to down window" })
+vim.keymap.set("n", "<leader>wk", "<C-w>k", { desc = "Move to up window" })
+vim.keymap.set("n", "<leader>wv", "<C-w>v", { desc = "Split window vertically (alias)" })
+vim.keymap.set("n", "<leader>ws", "<C-w>s", { desc = "Split window horizontally (alias)" })
+vim.keymap.set("n", "<leader>wq", "<C-w>q", { desc = "Close current window" })
+vim.keymap.set("n", "<leader>wo", "<C-w>o", { desc = "Close all other windows" })
 
 

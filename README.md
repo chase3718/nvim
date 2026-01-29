@@ -29,6 +29,7 @@ A modern, well-structured Neovim configuration using [lazy.nvim](https://github.
 - 🔆 **Vim-illuminate** for highlighting word references
 - 🍱 **Snacks** for quality of life improvements
 - 🏠 **Dashboard** for beautiful start screen
+- 💻 **Toggleterm** for integrated terminal management
 
 ## Requirements
 
@@ -151,6 +152,7 @@ Lazy.nvim will automatically install all plugins on first launch.
 │   │   ├── snacks.lua      # QoL improvements
 │   │   ├── telescope.lua   # Fuzzy finder
 │   │   ├── todo-comments.lua # TODO highlighting
+│   │   ├── toggleterm.lua  # Terminal management
 │   │   ├── treesitter.lua  # Syntax highlighting
 │   │   ├── undotree.lua    # Undo history
 │   │   ├── vim-fugitive.lua # Git integration
@@ -163,11 +165,25 @@ Lazy.nvim will automatically install all plugins on first launch.
 
 ## Key Mappings
 
+### VSCode-like Keybindings
+These keybindings provide a VSCode-like experience while maintaining Neovim's powerful motions:
+- `<C-b>` - Toggle file browser (Neo-tree)
+- `<C-`>` - Open new terminal in a new tab
+- `<C-w>` - Close current buffer/file
+- `<C-s>` - Save file
+
+**Note:** Since `<C-w>` is overridden, window navigation has been remapped:
+- `<C-h>` / `<C-l>` - Move to left/right window (unchanged)
+- `<leader>wj` / `<leader>wk` - Move to down/up window (replaces `<C-w>j` / `<C-w>k`)
+- `<leader>wv` - Split window vertically (replaces `<C-w>v`)
+- `<leader>ws` - Split window horizontally (replaces `<C-w>s`)
+- `<leader>wq` - Close current window
+- `<leader>wo` - Close all other windows
+
 ### General
 - `<Space>` - Leader key
 - `<leader>e` - Toggle Neo-tree (cwd)
 - `<leader>E` - Toggle Neo-tree (current file)
-- `<C-s>` - Save file
 - `jj` - Exit insert mode (in insert mode)
 - `<C-q>` - Quit
 
