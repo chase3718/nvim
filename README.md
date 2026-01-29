@@ -44,7 +44,7 @@ A modern, well-structured Neovim configuration using [lazy.nvim](https://github.
 
 ### Arch Linux
 ```bash
-sudo pacman -S --needed neovim git base-devel curl unzip ripgrep nodejs npm python python-pip python-pynvim fd tree-sitter
+sudo pacman -S --needed neovim git base-devel curl unzip ripgrep nodejs npm python python-pip python-pynvim fd
 ```
 
 ### Ubuntu/Debian
@@ -54,23 +54,24 @@ sudo apt update && sudo apt install -y neovim git build-essential curl unzip rip
 
 ### Fedora
 ```bash
-sudo dnf install -y neovim git gcc make curl unzip ripgrep nodejs npm python3 python3-pip python3-neovim fd-find tree-sitter-cli
+sudo dnf install -y neovim git gcc make curl unzip ripgrep nodejs npm python3 python3-pip python3-neovim fd-find
 ```
 
 ### openSUSE
 ```bash
-sudo zypper install -y neovim git gcc make curl unzip ripgrep nodejs npm python3 python3-pip python3-neovim fd tree-sitter
+sudo zypper install -y neovim git gcc make curl unzip ripgrep nodejs npm python3 python3-pip python3-neovim fd
 ```
 
 ### Alpine Linux
 ```bash
-sudo apk add neovim git build-base curl unzip ripgrep nodejs npm python3 py3-pip py3-pynvim fd tree-sitter
+sudo apk add neovim git build-base curl unzip ripgrep nodejs npm python3 py3-pip py3-pynvim fd
 ```
 
 **Notes:**
 - `tar` and `gzip` are required by Mason but are typically pre-installed on most Linux distributions. If you encounter extraction errors when Mason installs LSP servers, ensure these utilities are available.
 - After installing pip, you may need to ensure the Python neovim module is installed: `pip install --user pynvim` (if not installed via system package)
 - On Ubuntu/Debian, `fd` is installed as `fd-find`. You can create a symlink: `mkdir -p ~/.local/bin && ln -s $(which fdfind) ~/.local/bin/fd`
+- **tree-sitter-cli** is optional and only needed for parser development. If needed, install via npm: `npm install -g tree-sitter-cli`
 
 **Note:** If your distribution's package manager provides an older version of Neovim (< 0.9.0), you may need to use the [Neovim AppImage](https://github.com/neovim/neovim/releases) or build from source.
 
