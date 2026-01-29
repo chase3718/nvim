@@ -78,7 +78,7 @@ vim.keymap.set("n", "<C-w>", function()
 		-- Prompt user with options
 		local choice = vim.fn.confirm(
 			"Save changes to " .. vim.fn.expand("%:t") .. "?",
-			"&Save and close\n&Save without closing\n&Cancel",
+			"&Save and close\n&Close without saving\nC&ancel",
 			3 -- Default to Cancel
 		)
 		
@@ -87,8 +87,8 @@ vim.keymap.set("n", "<C-w>", function()
 			vim.cmd("write")
 			vim.cmd("bdelete")
 		elseif choice == 2 then
-			-- Save without closing
-			vim.cmd("write")
+			-- Close without saving (discard changes)
+			vim.cmd("bdelete!")
 		end
 		-- choice == 3 or 0 (ESC pressed) - do nothing (cancel)
 	else
