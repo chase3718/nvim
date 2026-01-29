@@ -12,8 +12,12 @@ A modern, well-structured Neovim configuration using [lazy.nvim](https://github.
 - 📦 **Mason** for easy LSP server installation
 - 🎯 **Harpoon** for quick file navigation
 - ⏪ **Undotree** for undo history visualization
-- 🔧 **Git integration** with vim-fugitive
+- 🔧 **Git integration** with vim-fugitive and gitsigns
 - 🤖 **GitHub Copilot** support
+- 📝 **Comment.nvim** for easy code commenting
+- 🔄 **Autopairs** for automatic bracket completion
+- 📊 **Lualine** status line
+- 🔲 **Indent guides** for better code structure visibility
 
 ## Requirements
 
@@ -54,11 +58,16 @@ Lazy.nvim will automatically install all plugins on first launch.
 │   │   └── lazy.lua        # Lazy.nvim bootstrap and setup
 │   ├── init.lua            # General Neovim settings
 │   ├── plugins/            # Plugin specifications
+│   │   ├── autopairs.lua   # Automatic bracket pairing
 │   │   ├── cmp.lua         # Autocompletion configuration
+│   │   ├── comment.lua     # Easy code commenting
 │   │   ├── copilot.lua     # GitHub Copilot
+│   │   ├── gitsigns.lua    # Git change indicators
 │   │   ├── harpoon.lua     # Quick file navigation
+│   │   ├── indent-blankline.lua # Indent guides
 │   │   ├── lsp.lua         # LSP Zero base
 │   │   ├── lspconfig.lua   # LSP server configurations
+│   │   ├── lualine.lua     # Status line
 │   │   ├── mason.lua       # LSP/tool installer
 │   │   ├── rose-pine.lua   # Color scheme
 │   │   ├── telescope.lua   # Fuzzy finder
@@ -111,6 +120,44 @@ Lazy.nvim will automatically install all plugins on first launch.
 
 ### Undotree
 - `<leader>u` - Toggle undotree
+
+### Comment
+- `gcc` - Toggle line comment
+- `gbc` - Toggle block comment
+- `gc` (visual mode) - Toggle comment on selection
+
+### Gitsigns
+- `]c` / `[c` - Next/previous git hunk
+- `<leader>hs` - Stage hunk
+- `<leader>hr` - Reset hunk
+- `<leader>hp` - Preview hunk
+- `<leader>hb` - Blame line
+- `<leader>tb` - Toggle line blame
+
+### Window Management
+- `<C-h>` / `<C-l>` - Move between windows
+- `<leader>sv` - Split window vertically
+- `<leader>sh` - Split window horizontally
+- `<leader>se` - Make splits equal size
+- `<leader>sx` - Close current split
+
+### Buffer Management
+- `<Tab>` - Next buffer
+- `<S-Tab>` - Previous buffer
+- `<leader>bd` - Delete buffer
+
+### Visual Mode
+- `<` / `>` - Indent left/right (stays in visual mode)
+- `J` / `K` - Move selected lines up/down
+
+### Utilities
+- `<Esc>` - Clear search highlights
+- `<C-d>` / `<C-u>` - Scroll down/up (cursor centered)
+- `n` / `N` - Next/previous search (cursor centered)
+- `<leader>p` - Paste without losing register (visual mode)
+- `<leader>y` - Copy to system clipboard
+- `<leader>d` - Delete to void register
+- `<leader>s` - Quick substitute word under cursor
 
 ### Completion (nvim-cmp)
 - `<C-n>` - Next suggestion
