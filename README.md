@@ -34,34 +34,34 @@ A modern, well-structured Neovim configuration using [lazy.nvim](https://github.
 
 ### Optional but Recommended
 - **Node.js** and **npm** - Required by many LSP servers (tsserver, eslint, etc.)
-- **Python 3** - Required by some LSP servers (pyright, etc.)
+- **Python 3** and **pip** - Required by some LSP servers (pyright, etc.) and for installing Python-based tools
 - **Ripgrep** - Significantly improves Telescope's live grep performance
 
 ## Installing Dependencies
 
 ### Arch Linux
 ```bash
-sudo pacman -S neovim git base-devel curl wget unzip tar gzip ripgrep nodejs npm python
+sudo pacman -S neovim git base-devel curl unzip tar gzip ripgrep nodejs npm python python-pip
 ```
 
 ### Ubuntu/Debian
 ```bash
-sudo apt update && sudo apt install -y neovim git build-essential curl wget unzip tar gzip ripgrep nodejs npm python3 python3-pip
+sudo apt update && sudo apt install -y neovim git build-essential curl unzip tar gzip ripgrep nodejs npm python3 python3-pip
 ```
 
 ### Fedora
 ```bash
-sudo dnf install -y neovim git gcc make curl wget unzip tar gzip ripgrep nodejs npm python3 python3-pip
+sudo dnf install -y neovim git gcc make curl unzip tar gzip ripgrep nodejs npm python3 python3-pip
 ```
 
 ### openSUSE
 ```bash
-sudo zypper install -y neovim git gcc make curl wget unzip tar gzip ripgrep nodejs npm python3 python3-pip
+sudo zypper install -y neovim git gcc make curl unzip tar gzip ripgrep nodejs npm python3 python3-pip
 ```
 
 ### Alpine Linux
 ```bash
-sudo apk add neovim git build-base curl wget unzip tar gzip ripgrep nodejs npm python3 py3-pip
+sudo apk add neovim git build-base curl unzip tar gzip ripgrep nodejs npm python3 py3-pip
 ```
 
 **Note:** If your distribution's package manager provides an older version of Neovim (< 0.9.0), you may need to use the [Neovim AppImage](https://github.com/neovim/neovim/releases) or build from source.
