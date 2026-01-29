@@ -29,6 +29,7 @@ A modern, well-structured Neovim configuration using [lazy.nvim](https://github.
 - 🔆 **Vim-illuminate** for highlighting word references
 - 🍱 **Snacks** for quality of life improvements
 - 🏠 **Dashboard** for beautiful start screen
+- 💻 **Toggleterm** for integrated terminal management
 
 ## Requirements
 
@@ -151,6 +152,7 @@ Lazy.nvim will automatically install all plugins on first launch.
 │   │   ├── snacks.lua      # QoL improvements
 │   │   ├── telescope.lua   # Fuzzy finder
 │   │   ├── todo-comments.lua # TODO highlighting
+│   │   ├── toggleterm.lua  # Terminal management
 │   │   ├── treesitter.lua  # Syntax highlighting
 │   │   ├── undotree.lua    # Undo history
 │   │   ├── vim-fugitive.lua # Git integration
@@ -166,12 +168,12 @@ Lazy.nvim will automatically install all plugins on first launch.
 ### VSCode-like Keybindings
 These keybindings provide a VSCode-like experience while maintaining Neovim's powerful motions:
 - `<C-b>` - Toggle file browser (Neo-tree) - works both outside and inside the file explorer
-- `Ctrl-\`` - Open new terminal in its own tab page
-  - Each press creates a new terminal tab (separate from file editor tabs)
-  - Terminal tabs appear in the Neovim tabline
-  - Switch between all tabs (files and terminals) using `Tab` / `Shift-Tab` or `gt` / `gT`
-  - Close terminal tab with `Ctrl-w` (close buffer/tab)
-  - Terminals have their own independent tab system
+- `Ctrl-\`` - Toggle terminal panel (toggleterm.nvim)
+  - Opens/closes a terminal panel at the bottom of the screen (15 lines)
+  - Terminal persists when toggled off and on
+  - Automatically enters insert mode when opened
+  - Does NOT create tabs in the main view
+  - Create multiple terminals with `:ToggleTerm` or by specifying a terminal ID
 - `<C-w>` - Close current buffer/file
 - `<C-s>` - Save file
 
