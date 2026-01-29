@@ -183,7 +183,7 @@ These keybindings provide a VSCode-like experience while maintaining Neovim's po
 - `<C-s>` - Save file
 
 **Additional VSCode-like behaviors:**
-- Opening a file from Neo-tree automatically enters insert mode
+- Opening a file from Neo-tree automatically enters insert mode (clicking in file explorer only, not in file view)
 - New buffers open in tabs by default (help files, Git status, quickfix, etc.)
 - Git status window (`<leader>gs`) opens in a new tab
 
