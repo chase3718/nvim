@@ -60,4 +60,40 @@ vim.keymap.set("n", "<C-q>", vim.cmd.q)
 
 -- from primeagen tutorial - maybe replace these over time
 
+-- ===================================
+-- VSCode-like keybindings
+-- ===================================
+
+-- Ctrl-b: Toggle file browser (like VSCode's sidebar)
+vim.keymap.set("n", "<C-b>", function()
+	require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
+end, { desc = "Toggle file browser" })
+
+-- Ctrl-`: Open new terminal in new tab (like VSCode)
+-- Terminal tab counter to keep track of terminal tabs
+local terminal_count = 0
+vim.keymap.set({"n", "i", "t"}, "<C-`>", function()
+	terminal_count = terminal_count + 1
+	vim.cmd("tabnew")
+	vim.cmd("terminal")
+	vim.cmd("startinsert")
+	-- Rename the tab to show it's a terminal
+	vim.cmd("file Terminal " .. terminal_count)
+end, { desc = "Open terminal in new tab" })
+
+-- Ctrl-w: Close current buffer/file (override Neovim's default window command prefix)
+-- First, we need to unmap the default Ctrl-w behavior, then remap it
+vim.keymap.set("n", "<C-w>", ":bdelete<CR>", { desc = "Close buffer" })
+
+-- Restore essential window navigation that used Ctrl-w as prefix
+-- These now use Alt as the modifier to avoid conflicts
+vim.keymap.set("n", "<A-h>", "<C-w>h", { desc = "Move to left window" })
+vim.keymap.set("n", "<A-j>", "<C-w>j", { desc = "Move to down window" })
+vim.keymap.set("n", "<A-k>", "<C-w>k", { desc = "Move to up window" })
+vim.keymap.set("n", "<A-l>", "<C-w>l", { desc = "Move to right window" })
+vim.keymap.set("n", "<A-v>", "<C-w>v", { desc = "Split window vertically" })
+vim.keymap.set("n", "<A-s>", "<C-w>s", { desc = "Split window horizontally" })
+vim.keymap.set("n", "<A-q>", "<C-w>q", { desc = "Close current window" })
+vim.keymap.set("n", "<A-o>", "<C-w>o", { desc = "Close all other windows" })
+
 
