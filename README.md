@@ -44,45 +44,56 @@ A modern, well-structured Neovim configuration using [lazy.nvim](https://github.
 - **tar** and **gzip** - For extracting tar.gz archives (usually pre-installed on most systems)
 
 ### Optional but Recommended
-- **Node.js** and **npm** - Required by many LSP servers (tsserver, eslint, etc.)
-- **Python 3** and **pip** - Required by some LSP servers (pyright, etc.) and for installing Python-based tools
-- **python-pynvim** - Enables Python provider for Neovim (optional but recommended)
 - **Ripgrep** - Significantly improves Telescope's live grep performance
 - **fd** - Enhanced file finder for Telescope (faster alternative to find)
+- **lazygit** - Terminal UI for git (used by snacks.nvim, optional)
+
+### Optional for Development
+- **Node.js** and **npm** - Required by many LSP servers (tsserver, eslint, etc.)
+- **Python 3** and **pip** - Required by some LSP servers (pyright, etc.) and for installing Python-based tools
 - **tree-sitter-cli** - CLI tool for nvim-treesitter (optional, only needed for parser development)
+
+**Note:** Node.js, Perl, and Ruby providers are disabled by default in this configuration. If you need them for specific plugins, you can enable them by removing the provider disable lines from `lua/config/options.lua`.
 
 ## Installing Dependencies
 
 ### Arch Linux
 ```bash
-sudo pacman -S --needed neovim git base-devel curl unzip ripgrep nodejs npm python python-pip python-pynvim fd
+sudo pacman -S --needed neovim git base-devel curl unzip ripgrep fd
+# Optional: lazygit for git UI integration
+# sudo pacman -S lazygit
 ```
 
 ### Ubuntu/Debian
 ```bash
-sudo apt update && sudo apt install -y neovim git build-essential curl unzip ripgrep nodejs npm python3 python3-pip python3-pynvim fd-find
+sudo apt update && sudo apt install -y neovim git build-essential curl unzip ripgrep fd-find
+# Optional: lazygit for git UI integration (may need to install from release page or PPA)
 ```
 
 ### Fedora
 ```bash
-sudo dnf install -y neovim git gcc make curl unzip ripgrep nodejs npm python3 python3-pip python3-neovim fd-find
+sudo dnf install -y neovim git gcc make curl unzip ripgrep fd-find
+# Optional: lazygit for git UI integration
+# sudo dnf install lazygit
 ```
 
 ### openSUSE
 ```bash
-sudo zypper install -y neovim git gcc make curl unzip ripgrep nodejs npm python3 python3-pip python3-neovim fd
+sudo zypper install -y neovim git gcc make curl unzip ripgrep fd
+# Optional: lazygit for git UI integration
 ```
 
 ### Alpine Linux
 ```bash
-sudo apk add neovim git build-base curl unzip ripgrep nodejs npm python3 py3-pip py3-pynvim fd
+sudo apk add neovim git build-base curl unzip ripgrep fd
+# Optional: lazygit for git UI integration
 ```
 
 **Notes:**
 - `tar` and `gzip` are required by Mason but are typically pre-installed on most Linux distributions. If you encounter extraction errors when Mason installs LSP servers, ensure these utilities are available.
-- After installing pip, you may need to ensure the Python neovim module is installed: `pip install --user pynvim` (if not installed via system package)
 - On Ubuntu/Debian, `fd` is installed as `fd-find`. You can create a symlink: `mkdir -p ~/.local/bin && ln -s $(which fdfind) ~/.local/bin/fd`
 - **tree-sitter-cli** is optional and only needed for parser development. If needed, install via npm: `npm install -g tree-sitter-cli`
+- **lazygit** is optional but recommended for the `<leader>gg` git UI keybinding. Without it, the keybinding simply won't be registered.
 
 **Note:** If your distribution's package manager provides an older version of Neovim (< 0.9.0), you may need to use the [Neovim AppImage](https://github.com/neovim/neovim/releases) or build from source.
 
@@ -192,7 +203,7 @@ Lazy.nvim will automatically install all plugins on first launch.
 - `<leader>gs` - Git status
 
 ### Snacks (Git)
-- `<leader>gg` - Lazygit
+- `<leader>gg` - Lazygit (requires lazygit to be installed)
 - `<leader>gb` - Git blame line
 - `<leader>gB` - Git browse
 
@@ -362,7 +373,19 @@ If you see "No module named pip":
 3. Alternative: `python3 -m ensurepip --user`
 
 ### Optional language provider warnings
-Mason may show warnings for optional language tools (Ruby, PHP, Java, etc.). These are only needed if you're developing in those languages. Install them only if needed.
+Node.js, Perl, and Ruby providers are disabled by default in this configuration to reduce checkhealth warnings. These providers are only needed for specific plugins that use them. If you need them, edit `lua/config/options.lua` and remove or comment out the relevant disable lines:
+```lua
+-- vim.g.loaded_node_provider = 0  -- Remove to enable Node.js provider
+-- vim.g.loaded_perl_provider = 0  -- Remove to enable Perl provider
+-- vim.g.loaded_ruby_provider = 0  -- Remove to enable Ruby provider
+```
+
+### Checkhealth warnings about missing tools
+Some checkhealth warnings are for optional features:
+- **lazygit** - Optional git UI tool. Install for `<leader>gg` keybinding.
+- **tree-sitter-cli** - Only needed for treesitter parser development.
+- **Image rendering tools** (kitty, wezterm) - Only needed for advanced image features in snacks.nvim.
+- **LaTeX/Mermaid tools** - Only needed for rendering math expressions and diagrams in markdown files.
 
 ## License
 
