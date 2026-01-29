@@ -37,16 +37,38 @@ vim.keymap.set({ "n", "i" }, "<C-s>", function()
     local use_prettier = prettier_available and prettier_filetypes[filetype]
 
     if use_prettier and filepath ~= "" then
+        -- Save the buffer first so Prettier formats the latest changes
+        local ok = pcall(vim.cmd, "write")
+        if not ok then
+            vim.notify("Failed to save file", vim.log.levels.ERROR)
+            return
+        end
+
         -- Use Prettier for formatting
+        local stderr_output = {}
         vim.fn.jobstart({ "prettier", "--write", filepath }, {
+            on_stderr = function(_, data)
+                if data then
+                    for _, line in ipairs(data) do
+                        if line and line ~= "" then
+                            table.insert(stderr_output, line)
+                        end
+                    end
+                end
+            end,
             on_exit = function(_, exit_code)
-                if exit_code == 0 then
-                    -- Reload the buffer to show formatted content
-                    vim.cmd("checktime")
-                    vim.cmd("write")
-                    vim.notify("Formatted with Prettier and saved", vim.log.levels.INFO)
-                else
-                    vim.notify("Prettier formatting failed", vim.log.levels.WARN)
+                -- Check if buffer is still valid and matches the filepath
+                if vim.api.nvim_buf_is_valid(bufnr) and vim.api.nvim_buf_get_name(bufnr) == filepath then
+                    if exit_code == 0 then
+                        -- Reload the buffer to show formatted content
+                        vim.api.nvim_buf_call(bufnr, function()
+                            vim.cmd("checktime")
+                        end)
+                        vim.notify("Formatted with Prettier", vim.log.levels.INFO)
+                    else
+                        local error_msg = #stderr_output > 0 and table.concat(stderr_output, "\n") or "Unknown error"
+                        vim.notify("File saved but Prettier formatting failed:\n" .. error_msg, vim.log.levels.WARN)
+                    end
                 end
             end,
         })
@@ -62,10 +84,10 @@ vim.keymap.set({ "n", "i" }, "<C-s>", function()
         end
 
         if can_format then
-            -- Neovim: format, then write in the callback
+            -- Format synchronously, then write
             vim.lsp.buf.format({
                 bufnr = bufnr,
-                async = true,
+                async = false,
                 timeout_ms = 2000,
             })
             vim.cmd("write")
