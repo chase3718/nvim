@@ -60,9 +60,9 @@ vim.keymap.set({ "n", "i" }, "<C-s>", function()
                 -- Check if buffer is still valid and matches the filepath
                 if vim.api.nvim_buf_is_valid(bufnr) and vim.api.nvim_buf_get_name(bufnr) == filepath then
                     if exit_code == 0 then
-                        -- Reload the buffer to show formatted content
+                        -- Reload the buffer to show formatted content (using edit! to avoid W12 warnings)
                         vim.api.nvim_buf_call(bufnr, function()
-                            vim.cmd("checktime")
+                            vim.cmd("edit!")
                         end)
                         vim.notify("Formatted with Prettier and saved", vim.log.levels.INFO)
                     else
