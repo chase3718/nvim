@@ -33,32 +33,5 @@ return {
 			ensure_installed = servers,
 			automatic_installation = true,
 		})
-
-		-- Setup LSP servers
-		mason_lspconfig.setup_handlers({
-			-- Default handler
-			function(server_name)
-				require("lspconfig")[server_name].setup({})
-			end,
-			-- Server-specific handlers
-			["lua_ls"] = function()
-				require("lspconfig").lua_ls.setup({
-					settings = {
-						Lua = {
-							diagnostics = {
-								globals = { "vim" },
-							},
-							workspace = {
-								library = vim.api.nvim_get_runtime_file("", true),
-								checkThirdParty = false,
-							},
-							telemetry = {
-								enable = false,
-							},
-						},
-					},
-				})
-			end,
-		})
 	end,
 }

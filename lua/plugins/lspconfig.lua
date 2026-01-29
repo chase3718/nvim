@@ -35,10 +35,10 @@ return {
 			vim.keymap.set("n", "<leader>vd", function()
 				vim.diagnostic.open_float()
 			end, vim.tbl_extend("force", opts, { desc = "Open diagnostic float" }))
-			vim.keymap.set("n", "[d", function()
+			vim.keymap.set("n", "]d", function()
 				vim.diagnostic.goto_next()
 			end, vim.tbl_extend("force", opts, { desc = "Next diagnostic" }))
-			vim.keymap.set("n", "]d", function()
+			vim.keymap.set("n", "[d", function()
 				vim.diagnostic.goto_prev()
 			end, vim.tbl_extend("force", opts, { desc = "Previous diagnostic" }))
 			vim.keymap.set("n", "<leader>vca", function()
@@ -50,7 +50,7 @@ return {
 			vim.keymap.set("n", "<leader>vrn", function()
 				vim.lsp.buf.rename()
 			end, vim.tbl_extend("force", opts, { desc = "Rename" }))
-			vim.keymap.set("i", "<C-h>", function()
+			vim.keymap.set("i", "<C-k>", function()
 				vim.lsp.buf.signature_help()
 			end, vim.tbl_extend("force", opts, { desc = "Signature help" }))
 		end
@@ -76,6 +76,33 @@ return {
 				header = "",
 				prefix = "",
 			},
+		})
+
+		-- Mason-lspconfig integration
+		require("mason-lspconfig").setup_handlers({
+			-- Default handler for all servers
+			function(server_name)
+				require("lspconfig")[server_name].setup({})
+			end,
+			-- Custom handler for lua_ls
+			["lua_ls"] = function()
+				require("lspconfig").lua_ls.setup({
+					settings = {
+						Lua = {
+							diagnostics = {
+								globals = { "vim" },
+							},
+							workspace = {
+								library = vim.api.nvim_get_runtime_file("", true),
+								checkThirdParty = false,
+							},
+							telemetry = {
+								enable = false,
+							},
+						},
+					},
+				})
+			end,
 		})
 	end,
 }

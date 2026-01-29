@@ -103,17 +103,17 @@ Lazy.nvim will automatically install all plugins on first launch.
 - `gi` - Go to implementation
 - `K` - Hover documentation
 - `<leader>vd` - Open diagnostic float
-- `[d` - Next diagnostic
-- `]d` - Previous diagnostic
+- `]d` - Next diagnostic
+- `[d` - Previous diagnostic
 - `<leader>vca` - Code action
 - `<leader>vrn` - Rename symbol
-- `<C-h>` - Signature help (in insert mode)
+- `<C-k>` - Signature help (insert mode)
 
 ### Harpoon
 - `<leader>a` - Add file to harpoon
-- `<C-e>` - Toggle harpoon quick menu
-- `<C-j>` - Previous harpoon file
-- `<C-k>` - Next harpoon file
+- `<leader>hm` - Toggle harpoon quick menu
+- `<leader>hp` - Previous harpoon file
+- `<leader>hn` - Next harpoon file
 
 ### Git (Fugitive)
 - `<leader>gs` - Git status
@@ -142,13 +142,13 @@ Lazy.nvim will automatically install all plugins on first launch.
 - `<leader>sx` - Close current split
 
 ### Buffer Management
-- `<Tab>` - Next buffer
-- `<S-Tab>` - Previous buffer
+- `<Tab>` - Next buffer (normal mode)
+- `<S-Tab>` - Previous buffer (normal mode)
 - `<leader>bd` - Delete buffer
 
 ### Visual Mode
 - `<` / `>` - Indent left/right (stays in visual mode)
-- `J` / `K` - Move selected lines up/down
+- `<A-j>` / `<A-k>` - Move selected lines down/up
 
 ### Utilities
 - `<Esc>` - Clear search highlights
@@ -164,8 +164,9 @@ Lazy.nvim will automatically install all plugins on first launch.
 - `<C-p>` - Previous suggestion
 - `<C-Space>` - Complete
 - `<CR>` - Confirm
-- `<Tab>` - Next item / expand snippet
-- `<S-Tab>` - Previous item / jump back in snippet
+- `<C-e>` - Abort completion (insert mode)
+- `<Tab>` - Next item / expand snippet (insert mode)
+- `<S-Tab>` - Previous item / jump back in snippet (insert mode)
 
 ## LSP Servers
 
